@@ -1,11 +1,13 @@
 --the game
 love = require("love")
+dungeon = require("dungeon")
 player = require("player")
 
 function love.load()
   -- This function is called once at the beginning of the game
   love.window.setFullscreen(true, "desktop")
   w, h = love.window.getDesktopDimensions(1)
+  dungeon:new()
 end
 
 function love.update(dt)
@@ -21,4 +23,6 @@ function love.draw()
 
   love.graphics.setColor(0, 0, 0)
   love.graphics.rectangle("fill", player.properties.x, player.properties.y, player.properties.width, player.properties.height)
+
+  love.graphics.print(dungeon.size, 500, 500)
 end
