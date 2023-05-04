@@ -1,4 +1,4 @@
-love = require("love")
+require("love")
 room = require("room")
 
 dungeon = {
@@ -9,9 +9,10 @@ dungeon = {
 function dungeon:new ()
     self.size = love.math.random(5, 10)
     for i = 1, self.size do
-        local r = room:new()
-        table.insert(self.rooms, r)
+        local new_room = room:new()
+        table.insert(self.rooms, new_room)
     end
+    return self
 end
 
 return dungeon
