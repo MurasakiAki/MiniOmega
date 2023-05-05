@@ -1,16 +1,16 @@
 local player = {}
 
-local w, h = love.window.getDesktopDimensions(1)
+w, h = love.window.getDesktopDimensions(1)
 
 player.properties = {
     x = w/2,
     y = h/2,
-    speed = 300,
+    speed = 350,
     width = 50,
     height = 50
 }
 
-function player.move(delta)
+function player.move(delta, room)
     --player movement
     local dx = 0
     local dy = 0
@@ -48,6 +48,18 @@ function player.move(delta)
       player.properties.y = 0
     elseif player.properties.y + player.properties.height > h then
       player.properties.y = h - player.properties.height
+    end
+
+    if player.properties.x < room:gen_position_x(w) then
+      player.properties.x = room:gen_position_x(w)
+    elseif player.properties.x + player.properties.width > room:gen_position_x(w) + room.width then
+      player.properties.x = room:gen_position_x(w) + room.width - player.properties.width
+    end
+
+    if player.properties.y < room:gen_position_y(h) then
+      player.properties.y = room:gen_position_y(h)
+    elseif player.properties.y + player.properties.height > room:gen_position_y(h) + room.height then
+      player.properties.y = room:gen_position_y(h) + room.height - player.properties.height
     end
     
     return player.properties
