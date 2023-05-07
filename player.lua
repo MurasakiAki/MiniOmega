@@ -2,13 +2,11 @@ local player = {}
 
 w, h = love.window.getDesktopDimensions(1)
 
-player.properties = {
-    x = w/2,
-    y = h/2,
-    speed = 350,
-    width = 50,
-    height = 50
-}
+player.x = w/2
+player.y = h/2
+player.speed = 350
+player.width = 50
+player.height = 50
 
 function player.move(delta, room)
     --player movement
@@ -34,35 +32,35 @@ function player.move(delta, room)
       dy = dy / magnitude
     end
   
-    player.properties.x = player.properties.x + dx * player.properties.speed * delta
-    player.properties.y = player.properties.y + dy * player.properties.speed * delta
+    player.x = player.x + dx * player.speed * delta
+    player.y = player.y + dy * player.speed * delta
   
     -- Keep player within bounds of the screen
-    if player.properties.x < 0 then
-      player.properties.x = 0
-    elseif player.properties.x + player.properties.width > w then
-      player.properties.x = w - player.properties.width
+    if player.x < 0 then
+      player.x = 0
+    elseif player.x + player.width > w then
+      player.x = w - player.width
     end
   
-    if player.properties.y < 0 then
-      player.properties.y = 0
-    elseif player.properties.y + player.properties.height > h then
-      player.properties.y = h - player.properties.height
+    if player.y < 0 then
+      player.y = 0
+    elseif player.y + player.height > h then
+      player.y = h - player.height
     end
 
-    if player.properties.x < room:gen_position_x(w) then
-      player.properties.x = room:gen_position_x(w)
-    elseif player.properties.x + player.properties.width > room:gen_position_x(w) + room.width then
-      player.properties.x = room:gen_position_x(w) + room.width - player.properties.width
+    if player.x < room:gen_position_x(w) then
+      player.x = room:gen_position_x(w)
+    elseif player.x + player.width > room:gen_position_x(w) + room.width then
+      player.x = room:gen_position_x(w) + room.width - player.width
     end
 
-    if player.properties.y < room:gen_position_y(h) then
-      player.properties.y = room:gen_position_y(h)
-    elseif player.properties.y + player.properties.height > room:gen_position_y(h) + room.height then
-      player.properties.y = room:gen_position_y(h) + room.height - player.properties.height
+    if player.y < room:gen_position_y(h) then
+      player.y = room:gen_position_y(h)
+    elseif player.y + player.height > room:gen_position_y(h) + room.height then
+      player.y = room:gen_position_y(h) + room.height - player.height
     end
     
-    return player.properties
+    return player
 end
 
 return player

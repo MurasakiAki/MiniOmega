@@ -14,8 +14,8 @@ end
 
 function love.update(dt)
   -- This function is called every frame with the time since the last frame as the argument (dt)
-  local properties = player.move(dt, dung.rooms[current_room])
-  player.properties = properties
+  player.move(dt, dung.rooms[current_room])
+  
 end
 
 function love.draw()
@@ -23,10 +23,28 @@ function love.draw()
   love.graphics.setBackgroundColor(0, 0.4, 0.4)
 
   love.graphics.setColor(0.8, 1, 0.1)
-  love.graphics.rectangle("fill", player.properties.x, player.properties.y, player.properties.width, player.properties.height)
+  love.graphics.rectangle("fill", player.x, player.y, player.width, player.height)
 
-  love.graphics.setColor(0, 0, 0)
-  love.graphics.rectangle("line", dung.rooms[current_room]:gen_position_x(w), dung.rooms[current_room]:gen_position_y(h), dung.rooms[current_room].width, dung.rooms[current_room].height)
+  local draw_room = function()
+    love.graphics.rectangle("fill", dung.rooms[current_room]:gen_position_x(w), dung.rooms[current_room]:gen_position_y(h), dung.rooms[current_room].width, dung.rooms[current_room].height)
+  end
+
+  -- set up the stencil buffer
+  love.graphics.stencil(draw_room, "replace", 1)
+  love.graphics.setStencilTest("notequal", 1)
+
+  -- draw the black rectangle with a room
+  love.graphics.setColor(love.math.colorFromBytes(34, 32, 52))
+  love.graphics.rectangle("fill", 0, 0, w, h)
+
+  -- reset the stencil buffer
+  love.graphics.setStencilTest()
+  love.graphics.stencil(function() end)
+
+  -- drawing info
+  love.graphics.setColor(1, 1, 1)
   love.graphics.print(string.format("room width: %d", dung.rooms[current_room].width), 0, 0)
   love.graphics.print(string.format("room height: %d",dung.rooms[current_room].height), 0, 10)
+
+  
 end
