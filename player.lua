@@ -1,6 +1,6 @@
-local player = {}
-
 w, h = love.window.getDesktopDimensions(1)
+
+local player = {}
 
 player.x = w/2
 player.y = h/2

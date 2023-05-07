@@ -1,9 +1,8 @@
-require("love")
+require('love')
 
 room = {
     width = 0,
     height = 0,
-    number_of_doors = 0
 }
 
 function room:new()
@@ -13,8 +12,7 @@ function room:new()
 
     new_room.width = love.math.random(500, 1600)
     new_room.height = love.math.random(500, 1000)
-    new_room.number_of_doors = love.math.random(1, 4)
-
+    new_room.doors = {}
     return new_room
 end
 
