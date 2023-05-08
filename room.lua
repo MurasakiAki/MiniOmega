@@ -12,7 +12,8 @@ function room:new()
 
     new_room.width = love.math.random(500, 1600)
     new_room.height = love.math.random(500, 1000)
-    new_room.doors = {}
+    new_room.forward_door = {x = 0, y = 0, is_active = true}
+    new_room.back_door = {x = 0, y = 0, is_active = true}
     return new_room
 end
 
