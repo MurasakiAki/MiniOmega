@@ -1,20 +1,18 @@
 --the game
-love = require("love")
+love = require('love')
 player = require("player")
 dungeon = require("dungeon")
 room = require('room')
-door = require('door')
+Door = require('door')
 
 local w, h = love.window.getDesktopDimensions(1)
 
-
+local world = love.physics.newWorld(0, 0, true)
 
 function love.load()
   -- This function is called once at the beginning of the game
   love.window.setFullscreen(true, "desktop")
-  
-  world = love.physics.newWorld(0, 0, true)
-
+  print(world:type())
   dung = dungeon:new(world)
 
   p = player:new(world, w/2, h/2)
@@ -22,8 +20,8 @@ function love.load()
   door_w = 60
   door_h = 5
   
-  forwarddoor = door:new(world, 0, 0, door_w, door_h)
-  backdoor = door:new(world, 0, 0, door_w, door_h)
+  forwarddoor = Door:new(world, 0, 0, door_w, door_h)
+  backdoor = Door:new(world, 0, 0, door_w, door_h)
   print(dung.rooms[dung.current_room].forward_door.x)
   world:setCallbacks(beginContact, nil, nil, nil)
 end
@@ -96,13 +94,13 @@ function beginContact(fixa, fixb, coll)
   local obj2 = fixb:getUserData()
 
   if obj1 and obj1.type == "Player" and obj2 and obj2.type == "Door" then
-    --dung.current_room = obj2.leads_to
+    dung.current_room = obj2.leads_to
     dung.changing_room = true
     --print(obj2.leads_to)
     --print(dung.current_room)
     
   elseif obj2 and obj2.type == "Player" and obj1 and obj1.type == "Door" then
-    --dung.current_room = obj1.leads_to
+    dung.current_room = obj1.leads_to
     dung.changing_room = true
     --print(obj2.leads_to)
     --print(dung.current_room)

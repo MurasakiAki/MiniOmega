@@ -1,18 +1,18 @@
 -- Door object module
 local Door = {}
 
-function Door.new(world, x, y, width, height, leads_to)
-  local door = {}
+function Door:new(world, x, y, width, height)
+    local door = {}
 
-  -- Create a door physics body
-  door.body = love.physics.newBody(world, x, y, "static")
-  door.shape = love.physics.newRectangleShape(width, height)
-  door.fixture = love.physics.newFixture(door.body, door.shape)
+    -- Create a door physics body
+    door.body = love.physics.newBody(world, x, y, "static")
+    door.shape = love.physics.newRectangleShape(width, height)
+    door.fixture = love.physics.newFixture(door.body, door.shape)
 
-  -- Set door properties
-  door.fixture:setUserData({type = "Door", leads_to = door.leads_to})
-  -- Draw the door
-  function door.draw()
+    -- Set door properties
+    door.fixture:setUserData({type = "Door", leads_to = door.leads_to})
+    -- Draw the door
+    function door.draw()
     love.graphics.setColor(0, 0, 0)
     love.graphics.polygon("fill", door.body:getWorldPoints(door.shape:getPoints()))
   end

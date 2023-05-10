@@ -1,6 +1,6 @@
-require('love')
+love = require('love')
 room = require('room')
-door = require('door')
+Door = require('door')
 
 sw, sh = love.window.getDesktopDimensions(1)
 

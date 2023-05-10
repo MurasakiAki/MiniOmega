@@ -1,5 +1,7 @@
 require('love')
 
+local screen_width, screen_height = love.window.getDesktopDimensions(1)
+
 room = {
     width = 0,
     height = 0,
@@ -10,8 +12,8 @@ function room:new()
     setmetatable(new_room, self)
     self.__index = self
 
-    new_room.width = love.math.random(500, 1600)
-    new_room.height = love.math.random(500, 1000)
+    new_room.width = love.math.random(screen_width * 0.2, screen_width * 0.95)
+    new_room.height = love.math.random(screen_height * 0.2, screen_height * 0.95)
     new_room.forward_door = {x = 0, y = 0, is_active = true}
     new_room.back_door = {x = 0, y = 0, is_active = true}
     return new_room
