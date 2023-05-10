@@ -1,27 +1,26 @@
--- Door object module
-local Door = {}
+-- Define the door object
+Door = {}
+Door.__index = Door
 
+-- Constructor
 function Door:new(world, x, y, width, height)
-    local door = {}
-    door.leads_to = 0
-    -- Create a door physics body
-    door.body = love.physics.newBody(world, x, y, "static")
-    door.shape = love.physics.newRectangleShape(width, height)
-    door.fixture = love.physics.newFixture(door.body, door.shape)
-
-    -- Set door properties
-    door.fixture:setUserData({type = "Door", leads_to = door.leads_to})
-
-  return door
+    local self = setmetatable({}, Door)
+    self.leads_to = 0
+    self.width = width
+    self.height = height
+    self.body = love.physics.newBody(world, x, y, "static")
+    self.shape = love.physics.newRectangleShape(self.width, self.height)
+    self.fixture = love.physics.newFixture(self.body, self.shape)
+    self.fixture:setUserData({type = "Door", leads_to = self.leads_to})
+    
+    return self
 end
 
--- Draw the door
+-- Drawing function
 function Door:draw()
-    love.graphics.setColor(0, 0, 0)
+    love.graphics.setColor(255, 255, 255)  -- Set the color for drawing the door
     local x, y = self.body:getPosition()
-    local width, height = self.shape:getDimensions()
-    
-    love.graphics.rectangle("fill", x, y, width, height)
+    love.graphics.rectangle("fill", x, y, self.width, self.height)
 end
 
 --inverting door position for transition effect in rooms

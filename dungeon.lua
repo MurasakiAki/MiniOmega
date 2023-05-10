@@ -22,12 +22,11 @@ function Dungeon:new (world)
     for i = 1, self.size, 1 
     do
         local new_door_w = 60
-        local new_door_h = 5
+        local new_door_h = 6
 
         if i == 1 then
-            self.rooms[i].forward_door.x = sw/2 - new_door_w/2
-            self.rooms[i].forward_door.y = self.rooms[i]:gen_position_y(sh)
-            print(string.format("in dungeon x: %f , y: %f", self.rooms[i].forward_door.x, self.rooms[i].forward_door.y))
+            self.rooms[i].forward_door.x = sw/2 - 100/2
+            self.rooms[i].forward_door.y = self.rooms[i]:gen_position_y(sh) - 100/2
             self.rooms[i].forward_door.is_active = true
             self.rooms[i].back_door.is_active = false
         end
