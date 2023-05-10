@@ -1,5 +1,7 @@
 love = require('love')
 
+local screen_width, screen_height = love.window.getDesktopDimensions(1)
+
 local player = {}
 player.__index = player
     
@@ -64,6 +66,21 @@ function player:move(delta, room)
   x = math.max(minX, math.min(x, maxX))
   y = math.max(minY, math.min(y, maxY))
   self.body:setPosition(x, y)
+end
+
+function player:shift(room)
+  local x, y = self.body:getPosition()
+  if x >= room:gen_position_x(screen_width) and x < room.width/2 then 
+    self.body:setPosition(x + 20, y)
+  elseif x > room.width/2 and x <= room:gen_position_x(screen_width) + room.width then 
+    self.body:setPosition(x - 20, y)
+  end
+  
+  if y >= room:gen_position_y(screen_height) and y < room.height/2 then
+    self.body:setPosition(x, y + 20)
+  elseif y > room.height/2 and y <= room:gen_position_y(screen_height) + room.height then
+    self.body:setPosition(x, y - 20)
+  end
 end
 
 function player:draw()

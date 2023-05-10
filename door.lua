@@ -1,26 +1,26 @@
-love = require('love')
+-- Door object module
+local Door = {}
 
-local door = {}
+function Door.new(world, x, y, width, height, leads_to)
+  local door = {}
 
-function door:new(world, x, y, w, h)
-    local obj = {
-        x = x,
-        y = y, 
-        w = w,
-        h = h,
-        body = love.physics.newBody(world, x, y, "static"),
-        shape = love.physics.newRectangleShape(w, h),
-    }
-    obj.fixture = love.physics.newFixture(obj.body, obj.shape)
-    --obj.fixture:setCategory(2)
-    --obj.fixture:setMask(1)
-    obj.fixture:setUserData({type = "Door", leads_to = obj.leads_to})
-    
-    setmetatable(obj, {__index = door})
-    return obj
+  -- Create a door physics body
+  door.body = love.physics.newBody(world, x, y, "static")
+  door.shape = love.physics.newRectangleShape(width, height)
+  door.fixture = love.physics.newFixture(door.body, door.shape)
+
+  -- Set door properties
+  door.fixture:setUserData({type = "Door", leads_to = door.leads_to})
+  -- Draw the door
+  function door.draw()
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.polygon("fill", door.body:getWorldPoints(door.shape:getPoints()))
+  end
+
+  return door
 end
 
-function door:invert_position(x, y, w, h, rw, rh)
+function Door:invert_position(x, y, w, h, rw, rh)
     inverted_positions = {x, y}
     --invert top/down
     if y == 0 then
@@ -43,10 +43,4 @@ function door:invert_position(x, y, w, h, rw, rh)
     return inverted_positions
 end
 
-function door:draw(current_room)
-    love.graphics.setColor(0.8, 0.1, 0.3)
-    love.graphics.rectangle("fill", self.body:getX(), self.body:getY(), self.w, self.h)
-end
-
-return door
-
+return Door

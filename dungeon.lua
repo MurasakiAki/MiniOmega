@@ -7,7 +7,8 @@ sw, sh = love.window.getDesktopDimensions(1)
 dungeon = {
     size = 0,
     rooms = {},
-    current_room = 1
+    current_room = 1,
+    changing_room = false
 }
 
 function dungeon:new (world)
@@ -24,15 +25,16 @@ function dungeon:new (world)
         local new_door_h = 5
 
         if i == 1 then
-            self.rooms[i].forward_door.x = self.rooms[i]:gen_position_x(sw) + (self.rooms[i].width/2 - new_door_w/2)
-            self.rooms[i].forward_door.y = self.rooms[i]:gen_position_y(sh) + 0
+            self.rooms[i].forward_door.x = sw/2 - new_door_w/2
+            self.rooms[i].forward_door.y = self.rooms[i]:gen_position_y(sh)
+            print(string.format("in dungeon x: %f , y: %f", self.rooms[i].forward_door.x, self.rooms[i].forward_door.y))
             self.rooms[i].forward_door.is_active = true
             self.rooms[i].back_door.is_active = false
         end
 
         if i ~= 1 and i ~= self.size then
-            self.rooms[i].forward_door.x = self.rooms[i]:gen_position_y(sh) + 0
-            self.rooms[i].forward_door.y = self.rooms[i]:gen_position_x(sw) + (self.rooms[i].width/2 - new_door_w/2)
+            self.rooms[i].forward_door.x = sw/ - new_door_w/2
+            self.rooms[i].forward_door.y = self.rooms[i]:gen_position_y(sh)
             self.rooms[i].forward_door.is_active = true
             self.rooms[i].back_door.is_active = false
         end
