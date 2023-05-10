@@ -1,13 +1,14 @@
 --the game
 love = require('love')
 player = require("player")
+windfield = require('lib/windfield')
 Dungeon = require("dungeon")
 room = require('room')
 Door = require('door')
 
 local w, h = love.window.getDesktopDimensions(1)
 
-local world = love.physics.newWorld(0, 0, true)
+local world = windfield.newWorld(0, 0, true)
 
 function love.load()
   -- This function is called once at the beginning of the game
@@ -20,18 +21,18 @@ function love.load()
   door_w = 60
   door_h = 6
   
-  forwarddoor = Door:new(world, 0, 0, door_w, door_h)
-  assert(forwarddoor, "Failed to create forward door")
-  backdoor = Door:new(world, 0, 0, door_w, door_h)
+  --forwarddoor = Door:new(world, 0, 0, door_w, door_h)
+  --assert(forwarddoor, "Failed to create forward door")
+  --backdoor = Door:new(world, 0, 0, door_w, door_h)
 
-  test = Door:new(world, 0, 0, 50, 50)
+  --test = Door:new(world, 0, 0, 50, 50)
   
   world:setCallbacks(beginContact, nil, nil, nil)
 end
 
 function love.update(dt)
   world:update(dt)
-
+--[[
   if love.keyboard.isDown("f") then
     test.body:setPosition(500, 500)
   else
@@ -41,6 +42,7 @@ function love.update(dt)
 
   --updating position of doors
   --forwarddoor.body:setPosition(dungeon.rooms[dungeon.current_room].forward_door.x, dungeon.rooms[dungeon.current_room].forward_door.y)
+  
   forwarddoor.leads_to = dungeon.current_room + 1
   local forwardUD = forwarddoor.fixture:getUserData()
   forwardUD.leads_to = forwarddoor.leads_to
@@ -54,8 +56,8 @@ function love.update(dt)
     p:shift(dungeon.rooms[dungeon.current_room])
     dungeon.changing_room = false
   end
-
-  p:move(dt, dungeon.rooms[dungeon.current_room])
+  ]]
+  p:move(dungeon.rooms[dungeon.current_room])
 
 end
 
@@ -63,9 +65,10 @@ function love.draw()
   -- This function is called every frame and is used for drawing to the screen
   love.graphics.setBackgroundColor(0, 0.4, 0.4)
 
+  world:draw()
   p:draw()
 
-  test:draw()
+  --test:draw()
 
   local draw_room = function()
     love.graphics.rectangle("fill", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h), dungeon.rooms[dungeon.current_room].width, dungeon.rooms[dungeon.current_room].height)

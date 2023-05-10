@@ -9,86 +9,84 @@ function player:new(world, x, y)
   local p = setmetatable({}, player)
   
   -- Set player properties
+
+  p.speed = 300
   p.x = x
   p.y = y
-  p.speed = 350
   p.width = 50
   p.height = 50
 
-  -- Create the physics body, shape, and fixture
-  p.body = love.physics.newBody(world, p.x, p.y, "dynamic")
-  p.shape = love.physics.newRectangleShape(p.width, p.height)
-  p.fixture = love.physics.newFixture(p.body, p.shape)
-    
-  -- Set fixture properties
-  --p.fixture:setCategory(1)
-  --p.fixture:setMask(2)
-  p.fixture:setUserData({type = "Player"})
-    
+  p.collider = world:newRectangleCollider(p.x, p.y, p.width, p.height)
+  p.collider:setFixedRotation(true)
+
   return p
 end
 
-function player:move(delta, room)
+function player:move(room)
+
+  self.x = self.collider:getX()
+  self.y = self.collider:getY()
+
   -- Player movement
   local dx = 0
   local dy = 0
-  
-  if love.keyboard.isDown("w") then
-    dy = -1
-  elseif love.keyboard.isDown("s") then
-    dy = 1
-  end
-  
-  if love.keyboard.isDown("a") then
-    dx = -1
-  elseif love.keyboard.isDown("d") then
-    dx = 1
-  end
-  
-  local magnitude = math.sqrt(dx^2 + dy^2)
-  
-  if magnitude > 0 then
-    dx = dx / magnitude
-    dy = dy / magnitude
-  end
-  
-  local velocityX, velocityY = dx * self.speed, dy * self.speed
-  self.body:setLinearVelocity(velocityX, velocityY)
-  
-  -- Keep player within bounds of the screen and room
-  local x, y = self.body:getPosition()
-  local minX = math.max(0, room:gen_position_x(love.graphics.getWidth()))
-  local minY = math.max(0, room:gen_position_y(love.graphics.getHeight()))
-  local maxX = math.min(minX + room.width - self.width, love.graphics.getWidth())
-  local maxY = math.min(minY + room.height - self.height, love.graphics.getHeight())
-  
-  
-  x = math.max(minX, math.min(x, maxX))
-  y = math.max(minY, math.min(y, maxY))
-  self.body:setPosition(x, y)
-end
 
-function player:shift(room)
-  local x, y = self.body:getPosition()
-  if x >= room:gen_position_x(screen_width) and x < room.width/2 then 
-    self.body:setPosition(x + 20, y)
-  elseif x > room.width/2 and x <= room:gen_position_x(screen_width) + room.width then 
-    self.body:setPosition(x - 20, y)
+  if love.keyboard.isDown("w") then
+    dy = dy - 1
   end
-  
-  if y >= room:gen_position_y(screen_height) and y < room.height/2 then
-    self.body:setPosition(x, y + 20)
-  elseif y > room.height/2 and y <= room:gen_position_y(screen_height) + room.height then
-    self.body:setPosition(x, y - 20)
+  if love.keyboard.isDown("s") then
+    dy = dy + 1
   end
+  if love.keyboard.isDown("a") then
+    dx = dx - 1
+  end
+  if love.keyboard.isDown("d") then
+    dx = dx + 1
+  end
+
+  -- Normalize the direction vector
+  local length = math.sqrt(dx * dx + dy * dy)
+  if length > 0 then
+    dx = dx / length
+    dy = dy / length
+  end
+
+  -- Apply the desired speed
+  local desiredSpeed = self.speed
+  local currentSpeed = math.sqrt(self.collider:getLinearVelocity())  -- Get current speed
+  if currentSpeed > desiredSpeed then
+    -- Limit the speed if it exceeds the desired speed
+    dx = dx * desiredSpeed / currentSpeed
+    dy = dy * desiredSpeed / currentSpeed
+  else
+    -- Apply the desired speed
+    dx = dx * desiredSpeed
+    dy = dy * desiredSpeed
+  end
+
+  self.collider:setLinearVelocity(dx, dy)
+
+  -- Keep player within bounds of the room
+  local screenW = love.graphics.getWidth()
+  local screenH = love.graphics.getHeight()
+  local minX = room:gen_position_x(screenW)
+  local minY = room:gen_position_y(screenH)
+  local maxX = minX + room.width
+  local maxY = minY + room.height 
+
+  if self.x < minX or self.x > maxX or self.y < minY or self.y > maxY then
+    self.x = math.max(minX, math.min(self.x, maxX))
+    self.y = math.max(minY, math.min(self.y, maxY))
+    self.collider:setPosition(self.x, self.y)
+  end
+
 end
 
 function player:draw()
   love.graphics.setColor(0.8, 1, 0.1)
 
-  local x,y = self.body:getPosition()
+  local x,y = self.collider:getPosition()
   love.graphics.rectangle("fill", x, y, self.width, self.height)
-
 end
 
 return player
