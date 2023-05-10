@@ -3,7 +3,7 @@ local Door = {}
 
 function Door:new(world, x, y, width, height)
     local door = {}
-
+    door.leads_to = 0
     -- Create a door physics body
     door.body = love.physics.newBody(world, x, y, "static")
     door.shape = love.physics.newRectangleShape(width, height)
@@ -11,15 +11,20 @@ function Door:new(world, x, y, width, height)
 
     -- Set door properties
     door.fixture:setUserData({type = "Door", leads_to = door.leads_to})
-    -- Draw the door
-    function door.draw()
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.polygon("fill", door.body:getWorldPoints(door.shape:getPoints()))
-  end
 
   return door
 end
 
+-- Draw the door
+function Door:draw()
+    love.graphics.setColor(0, 0, 0)
+    local x, y = self.body:getPosition()
+    local width, height = self.shape:getDimensions()
+    
+    love.graphics.rectangle("fill", x, y, width, height)
+end
+
+--inverting door position for transition effect in rooms
 function Door:invert_position(x, y, w, h, rw, rh)
     inverted_positions = {x, y}
     --invert top/down

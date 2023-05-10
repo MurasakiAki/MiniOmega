@@ -4,14 +4,14 @@ Door = require('door')
 
 sw, sh = love.window.getDesktopDimensions(1)
 
-dungeon = {
+Dungeon = {
     size = 0,
     rooms = {},
     current_room = 1,
     changing_room = false
 }
 
-function dungeon:new (world)
+function Dungeon:new (world)
     self.size = love.math.random(5, 10)
     for i = 1, self.size do
         local new_room = room:new()
@@ -33,7 +33,7 @@ function dungeon:new (world)
         end
 
         if i ~= 1 and i ~= self.size then
-            self.rooms[i].forward_door.x = sw/ - new_door_w/2
+            self.rooms[i].forward_door.x = sw/2 - new_door_w/2
             self.rooms[i].forward_door.y = self.rooms[i]:gen_position_y(sh)
             self.rooms[i].forward_door.is_active = true
             self.rooms[i].back_door.is_active = false
@@ -44,8 +44,9 @@ function dungeon:new (world)
     return self
 end
 
-return dungeon
+function Dungeon:change_room()
+end
 
---mkae dungeon aout of tables and lists ig, it could work,
---also doors will just load the draw scene based on the number of room you are in, the room will have some random atributes
+return Dungeon
+
 
