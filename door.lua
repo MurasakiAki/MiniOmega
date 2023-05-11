@@ -2,25 +2,30 @@
 Door = {}
 Door.__index = Door
 
--- Constructor
-function Door:new(world, x, y, width, height)
-    local self = setmetatable({}, Door)
-    self.leads_to = 0
-    self.width = width
-    self.height = height
-    self.body = love.physics.newBody(world, x, y, "static")
-    self.shape = love.physics.newRectangleShape(self.width, self.height)
-    self.fixture = love.physics.newFixture(self.body, self.shape)
-    self.fixture:setUserData({type = "Door", leads_to = self.leads_to})
-    
-    return self
+function Door:new(world, x, y, special_type)
+    local d = setmetatable({}, Door)
+
+    --door properties
+    d.type = "Door"
+    d.special_type = special_type
+    d.x = x
+    d.y = y
+    d.width = 100
+    d.height = 20
+    d.collider = world:newRectangleCollider(d.x, d.y, d.width, d.height)
+    d.collider:setFixedRotation(true)
+    d.collider:setType('static')
+
+    d.collider:setUserData(d)
+
+    return d
 end
 
 -- Drawing function
 function Door:draw()
+    
     love.graphics.setColor(255, 255, 255)  -- Set the color for drawing the door
-    local x, y = self.body:getPosition()
-    love.graphics.rectangle("fill", x, y, self.width, self.height)
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end
 
 --inverting door position for transition effect in rooms

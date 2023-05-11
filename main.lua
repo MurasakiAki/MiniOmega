@@ -17,10 +17,7 @@ function love.load()
   dungeon = Dungeon:new(world)
 
   p = player:new(world, w/2, h/2)
-
-  door_w = 60
-  door_h = 6
-  
+  door = Door:new(world, 500, 300, "Forward")
   --forwarddoor = Door:new(world, 0, 0, door_w, door_h)
   --assert(forwarddoor, "Failed to create forward door")
   --backdoor = Door:new(world, 0, 0, door_w, door_h)
@@ -32,6 +29,9 @@ end
 
 function love.update(dt)
   world:update(dt)
+
+  p:move(dungeon.rooms[dungeon.current_room])
+
 --[[
   if love.keyboard.isDown("f") then
     test.body:setPosition(500, 500)
@@ -57,7 +57,7 @@ function love.update(dt)
     dungeon.changing_room = false
   end
   ]]
-  p:move(dungeon.rooms[dungeon.current_room])
+  
 
 end
 
@@ -68,7 +68,7 @@ function love.draw()
   world:draw()
   p:draw()
 
-  --test:draw()
+  door:draw()
 
   local draw_room = function()
     love.graphics.rectangle("fill", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h), dungeon.rooms[dungeon.current_room].width, dungeon.rooms[dungeon.current_room].height)
@@ -87,17 +87,17 @@ function love.draw()
   love.graphics.stencil(function() end)
 
 -- Draw the door
-
+  --[[
   if dungeon.rooms[dungeon.current_room].forward_door.is_active == true then
-    --forwarddoor:draw()
-    --love.graphics.setColor(0.594, 0.145, 0.864)
-    --love.graphics.rectangle("fill", forwarddoor.body:getX(), forwarddoor.body:getY(), forwarddoor.width, forwarddoor.height)
+    forwarddoor:draw()
+    love.graphics.setColor(0.594, 0.145, 0.864)
+    love.graphics.rectangle("fill", forwarddoor.body:getX(), forwarddoor.body:getY(), forwarddoor.width, forwarddoor.height)
   end
 
   if dungeon.rooms[dungeon.current_room].back_door.is_active == true then
     backdoor:draw()
   end
-
+  ]]
   -- drawing info
   if love.keyboard.isDown("f1") then
     love.graphics.setColor(1, 1, 1)
@@ -105,26 +105,25 @@ function love.draw()
     love.graphics.print(string.format("current room: %d", dungeon.current_room), 0, 15)
     love.graphics.print(string.format("room width: %f , height: %f", dungeon.rooms[dungeon.current_room].width, dungeon.rooms[dungeon.current_room].height), 0, 30)
     love.graphics.print(string.format("room x: %f , y: %f", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h)), 0, 45)
-    love.graphics.print(string.format("door position: %d, %d", forwarddoor.body:getX(), forwarddoor.body:getY()), 0, 60)
+    --love.graphics.print(string.format("door position: %d, %d", forwarddoor.body:getX(), forwarddoor.body:getY()), 0, 60)
   end
   
 end
 
-function beginContact(fixa, fixb, coll)
-  local obj1 = fixa:getUserData()
-  local obj2 = fixb:getUserData()
+function beginContact(collider1, collider2, collision)
+  local object1 = collider1:getUserData()
+  local object2 = collider2:getUserData()
 
-  if obj1 and obj1.type == "Player" and obj2 and obj2.type == "Door" then
-    --dungeon.current_room = obj2.leads_to
-    dungeon.changing_room = true
-    --print(obj2.leads_to)
-    --print(dungeon.current_room)
-    
-  elseif obj2 and obj2.type == "Player" and obj1 and obj1.type == "Door" then
-    --dungeon.current_room = obj1.leads_to
-    dungeon.changing_room = true
-    --print(obj2.leads_to)
-    --print(dungeon.current_room)
-  end
+  if object1 and object1.type == "Player" and object2 and object2.type == "Door" or
+  object2 and object2.type == "Player" and object1 and object1.type == "Door" then
+		if object1.special_type and object1.special_type == "Forward" or
+		object2.special_type and object2.special_type == "Forward" then
+    	--dungeon.current_room = obj2.leads_to
+    	dungeon.changing_room = true
+    	dungeon.current_room = dungeon.current_room + 1
+    	--print(obj2.leads_to)
+    	--print(dungeon.current_room)
+		end
+	end
 end
 

@@ -8,8 +8,8 @@ player.__index = player
 function player:new(world, x, y)
   local p = setmetatable({}, player)
   
-  -- Set player properties
-
+  --player properties
+  p.type = "Player"
   p.speed = 300
   p.x = x
   p.y = y
@@ -19,6 +19,8 @@ function player:new(world, x, y)
   p.collider = world:newRectangleCollider(p.x, p.y, p.width, p.height)
   p.collider:setFixedRotation(true)
 
+  p.collider:setUserData(p)
+  
   return p
 end
 
@@ -67,10 +69,8 @@ function player:move(room)
   self.collider:setLinearVelocity(dx, dy)
 
   -- Keep player within bounds of the room
-  local screenW = love.graphics.getWidth()
-  local screenH = love.graphics.getHeight()
-  local minX = room:gen_position_x(screenW)
-  local minY = room:gen_position_y(screenH)
+  local minX = room:gen_position_x(screen_width)
+  local minY = room:gen_position_y(screen_height)
   local maxX = minX + room.width
   local maxY = minY + room.height 
 
@@ -85,8 +85,7 @@ end
 function player:draw()
   love.graphics.setColor(0.8, 1, 0.1)
 
-  local x,y = self.collider:getPosition()
-  love.graphics.rectangle("fill", x, y, self.width, self.height)
+  love.graphics.rectangle("fill", self.x - self.width/2, self.y - self.height/2, self.width, self.height)
 end
 
 return player
