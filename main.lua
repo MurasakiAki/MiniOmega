@@ -5,6 +5,7 @@ windfield = require('lib/windfield')
 Dungeon = require("dungeon")
 room = require('room')
 Door = require('door')
+Tiles = require('tiles')
 
 local w, h = love.window.getDesktopDimensions(1)
 
@@ -38,7 +39,7 @@ end
 function love.draw()
   -- This function is called every frame and is used for drawing to the screen
   love.graphics.setBackgroundColor(0, 0.4, 0.4)
-
+  dungeon.rooms[dungeon.current_room].tileset:draw()
   world:draw()
   p:draw()
 
@@ -68,9 +69,13 @@ function love.draw()
     love.graphics.print(string.format("current room: %d", dungeon.current_room), 0, 15)
     love.graphics.print(string.format("room width: %f , height: %f", dungeon.rooms[dungeon.current_room].width, dungeon.rooms[dungeon.current_room].height), 0, 30)
     love.graphics.print(string.format("room x: %f , y: %f", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h)), 0, 45)
-    --love.graphics.print(string.format("door position: %d, %d", forwarddoor.body:getX(), forwarddoor.body:getY()), 0, 60)
+    love.graphics.print(string.format("tileset x: %d , y: %d", dungeon.rooms[dungeon.current_room].tileset.x, dungeon.rooms[dungeon.current_room].tileset.y), 0, 60)
   end
   
+end
+
+function love.mousepressed(x, y, button)
+  dungeon.rooms[dungeon.current_room].tileset:mousepressed(x, y, button)
 end
 
 function beginContact(collider1, collider2, collision)
