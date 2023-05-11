@@ -92,11 +92,14 @@ function beginContact(collider1, collider2, collision)
   if object1 and object1.type == "Player" and object2 and object2.type == "Door" or
   object2 and object2.type == "Player" and object1 and object1.type == "Door" then
     
+    
+
 		if object1.special_type and object1.special_type == "Forward" or
 		object2.special_type and object2.special_type == "Forward" then
       if dungeon.current_room == dungeon.size then
         dungeon.changing_room = false
       else
+        dungeon:change_room(p)
         dungeon.changing_room = true
     	  dungeon.current_room = dungeon.current_room + 1
 
