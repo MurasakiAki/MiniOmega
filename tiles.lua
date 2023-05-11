@@ -37,7 +37,7 @@ function Tiles:mousepressed(x, y, button, player)
     local px, py = player.collider:getPosition()
     local mx, my = love.mouse.getPosition()
 
-    local distance = math.sqrt((my - py)^2 + (px - mx)^2)
+    local distance = math.sqrt((my - py)^2 + (px - mx)^2) --lol my pie
 
     if button == 2 and distance <= 128 then -- Right mouse button
         -- Find the tile that was clicked
