@@ -17,12 +17,8 @@ function love.load()
   dungeon = Dungeon:new(world)
 
   p = player:new(world, w/2, h/2)
-  door = Door:new(world, 500, 300, "Forward")
-  --forwarddoor = Door:new(world, 0, 0, door_w, door_h)
-  --assert(forwarddoor, "Failed to create forward door")
-  --backdoor = Door:new(world, 0, 0, door_w, door_h)
-
-  --test = Door:new(world, 0, 0, 50, 50)
+  fdoor = Door:new(world, 0, 0, "Forward")
+  bdoor = Door:new(world, 0, 0, "Back")
   
   world:setCallbacks(beginContact, nil, nil, nil)
 end
@@ -32,33 +28,11 @@ function love.update(dt)
 
   p:move(dungeon.rooms[dungeon.current_room])
 
---[[
-  if love.keyboard.isDown("f") then
-    test.body:setPosition(500, 500)
-  else
-    test.body:setPosition(0, 0)
-  end
-  
 
   --updating position of doors
-  --forwarddoor.body:setPosition(dungeon.rooms[dungeon.current_room].forward_door.x, dungeon.rooms[dungeon.current_room].forward_door.y)
+  fdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].forward_door.x, dungeon.rooms[dungeon.current_room].forward_door.y)
+  bdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].back_door.x, dungeon.rooms[dungeon.current_room].back_door.y)
   
-  forwarddoor.leads_to = dungeon.current_room + 1
-  local forwardUD = forwarddoor.fixture:getUserData()
-  forwardUD.leads_to = forwarddoor.leads_to
-  forwarddoor.fixture:setUserData(forwardUD)
-  --print(forwarddoor.leads_to)
-
-  backdoor.body:setPosition(dungeon.rooms[dungeon.current_room].back_door.x, dungeon.rooms[dungeon.current_room].back_door.y)
-  backdoor.leads_to = dungeon.current_room - 1
-
-  if dungeon.current_room ~= 1 and dungeon.changing_room then
-    p:shift(dungeon.rooms[dungeon.current_room])
-    dungeon.changing_room = false
-  end
-  ]]
-  
-
 end
 
 function love.draw()
@@ -68,7 +42,8 @@ function love.draw()
   world:draw()
   p:draw()
 
-  door:draw()
+  fdoor:draw()
+  bdoor:draw()
 
   local draw_room = function()
     love.graphics.rectangle("fill", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h), dungeon.rooms[dungeon.current_room].width, dungeon.rooms[dungeon.current_room].height)
@@ -86,18 +61,6 @@ function love.draw()
   love.graphics.setStencilTest()
   love.graphics.stencil(function() end)
 
--- Draw the door
-  --[[
-  if dungeon.rooms[dungeon.current_room].forward_door.is_active == true then
-    forwarddoor:draw()
-    love.graphics.setColor(0.594, 0.145, 0.864)
-    love.graphics.rectangle("fill", forwarddoor.body:getX(), forwarddoor.body:getY(), forwarddoor.width, forwarddoor.height)
-  end
-
-  if dungeon.rooms[dungeon.current_room].back_door.is_active == true then
-    backdoor:draw()
-  end
-  ]]
   -- drawing info
   if love.keyboard.isDown("f1") then
     love.graphics.setColor(1, 1, 1)
@@ -116,14 +79,37 @@ function beginContact(collider1, collider2, collision)
 
   if object1 and object1.type == "Player" and object2 and object2.type == "Door" or
   object2 and object2.type == "Player" and object1 and object1.type == "Door" then
+    
 		if object1.special_type and object1.special_type == "Forward" or
 		object2.special_type and object2.special_type == "Forward" then
     	--dungeon.current_room = obj2.leads_to
-    	dungeon.changing_room = true
-    	dungeon.current_room = dungeon.current_room + 1
-    	--print(obj2.leads_to)
-    	--print(dungeon.current_room)
-		end
-	end
+      if dungeon.current_room == dungeon.size then
+        dungeon.changing_room = false
+      else
+        dungeon.changing_room = true
+    	  dungeon.current_room = dungeon.current_room + 1
+
+        p.collider:applyLinearImpulse(p.collider:getX(), dungeon.rooms[dungeon.current_room]:gen_position_y(h) + dungeon.rooms[dungeon.current_room].height - 100)
+        print(p.y, p.collider:getY())
+      end
+
+    else 
+      if dungeon.current_room == 1 then
+        dungeon.changing_room = false
+      else
+        dungeon.changing_room = true
+    	  dungeon.current_room = dungeon.current_room - 1
+
+        p.y = dungeon.rooms[dungeon.current_room]:gen_position_y(h) + dungeon.rooms[dungeon.current_room].height + 100
+
+		  end
+
+	  end
+
+  end
+
 end
+
+
+
 

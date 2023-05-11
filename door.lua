@@ -23,7 +23,9 @@ end
 
 -- Drawing function
 function Door:draw()
-    
+    self.x = self.collider:getX() - self.width/2
+    self.y = self.collider:getY() - self.height/2
+
     love.graphics.setColor(255, 255, 255)  -- Set the color for drawing the door
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end

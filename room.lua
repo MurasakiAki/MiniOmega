@@ -13,9 +13,9 @@ function room:new()
     self.__index = self
 
     new_room.width = love.math.random(screen_width * 0.2, screen_width * 0.95)
-    new_room.height = love.math.random(screen_height * 0.2, screen_height * 0.95)
-    new_room.forward_door = {x = 0, y = 0, is_active = true}
-    new_room.back_door = {x = 0, y = 0, is_active = true}
+    new_room.height = love.math.random(screen_height * 0.4, screen_height * 0.95)
+    new_room.forward_door = {x = 0, y = 0}
+    new_room.back_door = {x = 0, y = 0}
     return new_room
 end
 

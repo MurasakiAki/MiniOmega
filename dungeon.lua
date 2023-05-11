@@ -21,21 +21,28 @@ function Dungeon:new (world)
     --adding doors to rooms cycle
     for i = 1, self.size, 1 
     do
-        local new_door_w = 60
-        local new_door_h = 6
+        local new_door_w = 100
+        local new_door_h = 50
 
         if i == 1 then
-            self.rooms[i].forward_door.x = sw/2 - 100/2
-            self.rooms[i].forward_door.y = self.rooms[i]:gen_position_y(sh) - 100/2
-            self.rooms[i].forward_door.is_active = true
-            self.rooms[i].back_door.is_active = false
+            self.rooms[i].forward_door.x = sw/2
+            self.rooms[i].forward_door.y = self.rooms[i]:gen_position_y(sh)
+            self.rooms[i].back_door.x = 0
+            self.rooms[i].back_door.y = 0
         end
 
         if i ~= 1 and i ~= self.size then
-            self.rooms[i].forward_door.x = sw/2 - new_door_w/2
+            self.rooms[i].forward_door.x = sw/2
             self.rooms[i].forward_door.y = self.rooms[i]:gen_position_y(sh)
-            self.rooms[i].forward_door.is_active = true
-            self.rooms[i].back_door.is_active = false
+            self.rooms[i].back_door.x = sw/2
+            self.rooms[i].back_door.y = self.rooms[i]:gen_position_y(sh) + self.rooms[i].height 
+        end
+
+        if i == self.size then
+            self.rooms[i].forward_door.x = 0
+            self.rooms[i].forward_door.y = 0
+            self.rooms[i].back_door.x = sw/2
+            self.rooms[i].back_door.y = self.rooms[i]:gen_position_y(sh) + self.rooms[i].height 
         end
             
     end
