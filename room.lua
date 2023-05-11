@@ -6,7 +6,8 @@ local screen_width, screen_height = love.window.getDesktopDimensions(1)
 room = {
     width = 0,
     height = 0,
-    tileset = nil
+    tileset = nil,
+    is_special = false
 }
 
 function room:new()
@@ -20,13 +21,18 @@ function room:new()
     new_room.forward_door = {x = 0, y = 0}
     new_room.back_door = {x = 0, y = 0}
 
+    --setting the rooms tileset
     local numRows = math.floor(new_room.height / 64)
     local numCols = math.floor(new_room.width / 64)
     
-
-    print(new_room:gen_position_x(screen_width))
-
     new_room.tileset = Tiles:new(64, 64, numCols, numRows, new_room:gen_position_x(screen_width), new_room:gen_position_y(screen_height))
+    
+    --if room will be special room
+    local special_chance = math.random(1, 10)
+
+    if special_chance == 7 then
+        new_room.is_special = true
+    end
 
     return new_room
 end

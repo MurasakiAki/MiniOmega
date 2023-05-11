@@ -40,7 +40,9 @@ function love.draw()
   -- This function is called every frame and is used for drawing to the screen
   --drawing objects in the scene
   love.graphics.setBackgroundColor(0, 0.4, 0.4)
-  dungeon.rooms[dungeon.current_room].tileset:draw()
+  if dungeon.rooms[dungeon.current_room].is_special ~= true then --drawing tileset only when the room isnt special, no need for farmlands in a shop/chest room etc
+    dungeon.rooms[dungeon.current_room].tileset:draw()
+  end
   world:draw()
   p:draw()
 
@@ -72,6 +74,7 @@ function love.draw()
     love.graphics.print(string.format("room width: %f , height: %f", dungeon.rooms[dungeon.current_room].width, dungeon.rooms[dungeon.current_room].height), 0, 30)
     love.graphics.print(string.format("room x: %f , y: %f", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h)), 0, 45)
     love.graphics.print(string.format("tileset x: %d , y: %d", dungeon.rooms[dungeon.current_room].tileset.x, dungeon.rooms[dungeon.current_room].tileset.y), 0, 60)
+    love.graphics.print(string.format("is room special: %s", tostring(dungeon.rooms[dungeon.current_room].is_special)), 0, 75)
   end
   
 end
@@ -91,7 +94,6 @@ function beginContact(collider1, collider2, collision)
     
 		if object1.special_type and object1.special_type == "Forward" or
 		object2.special_type and object2.special_type == "Forward" then
-    	--dungeon.current_room = obj2.leads_to
       if dungeon.current_room == dungeon.size then
         dungeon.changing_room = false
       else
@@ -99,7 +101,7 @@ function beginContact(collider1, collider2, collision)
     	  dungeon.current_room = dungeon.current_room + 1
 
         p.collider:applyLinearImpulse(p.collider:getX(), dungeon.rooms[dungeon.current_room]:gen_position_y(h) + dungeon.rooms[dungeon.current_room].height - 100)
-        print(p.y, p.collider:getY())
+
       end
 
     else 
