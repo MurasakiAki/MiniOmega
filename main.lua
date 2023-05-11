@@ -38,6 +38,7 @@ end
 
 function love.draw()
   -- This function is called every frame and is used for drawing to the screen
+  --drawing objects in the scene
   love.graphics.setBackgroundColor(0, 0.4, 0.4)
   dungeon.rooms[dungeon.current_room].tileset:draw()
   world:draw()
@@ -46,6 +47,7 @@ function love.draw()
   fdoor:draw()
   bdoor:draw()
 
+  --draw room function
   local draw_room = function()
     love.graphics.rectangle("fill", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h), dungeon.rooms[dungeon.current_room].width, dungeon.rooms[dungeon.current_room].height)
   end
@@ -74,10 +76,12 @@ function love.draw()
   
 end
 
+--mouse controller
 function love.mousepressed(x, y, button)
-  dungeon.rooms[dungeon.current_room].tileset:mousepressed(x, y, button)
+  dungeon.rooms[dungeon.current_room].tileset:mousepressed(x, y, button, p)
 end
 
+--collision detection between player and door
 function beginContact(collider1, collider2, collision)
   local object1 = collider1:getUserData()
   local object2 = collider2:getUserData()

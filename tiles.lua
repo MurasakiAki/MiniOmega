@@ -32,8 +32,14 @@ function Tiles:draw()
     end
 end
 
-function Tiles:mousepressed(x, y, button)
-    if button == 2 then -- Right mouse button
+function Tiles:mousepressed(x, y, button, player)
+
+    local px, py = player.collider:getPosition()
+    local mx, my = love.mouse.getPosition()
+
+    local distance = math.sqrt((my - py)^2 + (px - mx)^2)
+
+    if button == 2 and distance <= 128 then -- Right mouse button
         -- Find the tile that was clicked
         local col = math.floor((x - self.x) / self.tileWidth) + 1
         local row = math.floor((y - self.y) / self.tileHeight) + 1
