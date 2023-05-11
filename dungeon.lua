@@ -50,7 +50,8 @@ function Dungeon:new (world)
     return self
 end
 
-function Dungeon:change_room()
+function Dungeon:change_room(player)
+    player.collider:setPosition()
 end
 
 return Dungeon
