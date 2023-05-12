@@ -68,7 +68,7 @@ function Tiles:mousepressed(x, y, button, player)
                 tile.saved_image = tile.image -- Save the current image
                 tile.image = love.graphics.newImage("textures/tiles/field1.png") -- Load and assign the new image
                 tile.is_plowed = true
-            else
+            elseif tile.has_seed == false then
                 tile.image = tile.saved_image -- Restore the saved image
                 tile.saved_image = nil -- Clear the saved image
                 tile.is_plowed = false
@@ -89,6 +89,24 @@ function Tiles:mousepressed(x, y, button, player)
             if tile.is_watered == false and tile.is_plowed == true then
                 tile.image = love.graphics.newImage("textures/tiles/field2.png") -- Assign the "field2.png" image to the tile
                 tile.is_watered = true
+            else
+                -- If the tile doesn't have the "field1.png" image, do nothing
+            end
+        end
+    end
+
+    if self.is_clickable == true and player.in_hand == "seed" and button == 2 and distance <= 128 then
+        -- Find the tile that was clicked
+        local col = math.floor((x - self.x) / self.tileWidth) + 1
+        local row = math.floor((y - self.y) / self.tileHeight) + 1
+        
+        -- Ensure the tile exists before modifying it
+        if self[col] and self[col][row] then
+            -- Change the image of the clicked tile
+            local tile = self[col][row]
+            if tile.is_watered == true and tile.is_plowed == true then
+
+                tile.has_seed = true
             else
                 -- If the tile doesn't have the "field1.png" image, do nothing
             end
