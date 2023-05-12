@@ -16,6 +16,7 @@ function player:new(world, x, y)
   p.width = 50
   p.height = 50
 
+  p.current_item_index = 1
   p.in_hand = "hoe"
 
   p.collider = world:newRectangleCollider(p.x, p.y, p.width, p.height)
@@ -84,14 +85,17 @@ function player:move(room)
 
 end
 
+--function for cycling through items (hoe, watering can, seeds)
 function player:update_hand(key)
   local item_list = {"hoe", "water", "seed"}
-  local current_item_index = 1
 
   if key == "tab" then
-    if current_item_index ~= #item_list then
-      current_item_index = current_item_index + 1
-      self.in_hand = item_list[current_item_index]
+    if self.current_item_index ~= #item_list then
+      self.current_item_index = self.current_item_index + 1
+      self.in_hand = item_list[self.current_item_index]
+    else
+      self.current_item_index = 1
+      self.in_hand = item_list[self.current_item_index]
     end    
   end
 end
