@@ -34,6 +34,10 @@ function room:new()
         new_room.is_special = true
     end
 
+    if new_room.is_special == true then
+        new_room.tileset.is_clickable = false
+    end
+
     return new_room
 end
 
