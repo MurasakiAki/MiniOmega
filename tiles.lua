@@ -11,7 +11,7 @@ function Tiles:new(tileWidth, tileHeight, numCols, numRows, x, y)
         for j = 1, numRows do
             local randomImage = love.graphics.newImage("textures/tiles/" .. grassImages[love.math.random(1, #grassImages)])
             randomImage:setFilter("nearest", "nearest") -- Set filter mode to "nearest"
-            tiles[i][j] = {x = x + (i - 1) * tileWidth, y = y + (j - 1) * tileHeight, image = randomImage, saved_image = nil}
+            tiles[i][j] = {x = x + (i - 1) * tileWidth, y = y + (j - 1) * tileHeight, image = randomImage, saved_image = nil, is_plowed = false, is_watered = false, has_seed = false}
         end
     end
 
@@ -19,9 +19,10 @@ function Tiles:new(tileWidth, tileHeight, numCols, numRows, x, y)
     tiles.tileHeight = tileHeight
     tiles.x = x
     tiles.y = y
+
+    tiles.field1Image = love.graphics.newImage("textures/tiles/field1.png")
+
     tiles.is_clickable = true
-    tiles.is_plowed = false
-    tiles.is_watered = false
 
     setmetatable(tiles, self)
     self.__index = self
@@ -71,11 +72,12 @@ function Tiles:mousepressed(x, y, button, player)
                 tile.image = tile.saved_image -- Restore the saved image
                 tile.saved_image = nil -- Clear the saved image
                 tile.is_plowed = false
+                tile.is_watered = false
             end
         end
     end
-
-    if self.is_clickable == true and  player.in_hand == "water" and self.is_watered == false and button == 2 and distance <= 128 then
+    
+    if self.is_clickable == true and player.in_hand == "water" and button == 2 and distance <= 128 then
         -- Find the tile that was clicked
         local col = math.floor((x - self.x) / self.tileWidth) + 1
         local row = math.floor((y - self.y) / self.tileHeight) + 1
@@ -84,16 +86,14 @@ function Tiles:mousepressed(x, y, button, player)
         if self[col] and self[col][row] then
             -- Change the image of the clicked tile
             local tile = self[col][row]
-            if tile.saved_image == nil or tile.image == tile.saved_image then
-                tile.saved_image = tile.image -- Save the current image
-                tile.image = love.graphics.newImage("textures/tiles/field2.png") -- Load and assign the new image
-                tile.is_plowed = true
+            if tile.is_watered == false and tile.is_plowed == true then
+                tile.image = love.graphics.newImage("textures/tiles/field2.png") -- Assign the "field2.png" image to the tile
+                tile.is_watered = true
             else
-                tile.image = tile.saved_image -- Restore the saved image
-                tile.saved_image = nil -- Clear the saved image
-                tile.is_plowed = false
+                -- If the tile doesn't have the "field1.png" image, do nothing
             end
         end
     end
+
 end
 return Tiles
