@@ -16,6 +16,8 @@ function player:new(world, x, y)
   p.width = 50
   p.height = 50
 
+  p.in_hand = "hoe"
+
   p.collider = world:newRectangleCollider(p.x, p.y, p.width, p.height)
   p.collider:setFixedRotation(true)
 
@@ -81,6 +83,19 @@ function player:move(room)
   end
 
 end
+
+function player:update_hand(key)
+  local item_list = {"hoe", "water", "seed"}
+  local current_item_index = 1
+
+  if key == "tab" then
+    if current_item_index ~= #item_list then
+      current_item_index = current_item_index + 1
+      self.in_hand = item_list[current_item_index]
+    end    
+  end
+end
+
 
 function player:draw()
   love.graphics.setColor(0.8, 1, 0.1)
