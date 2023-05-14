@@ -40,7 +40,7 @@ function beginContact(collider1, collider2, collision)
       if dungeon.current_room == dungeon.size then
         dungeon.changing_room = false
       else
-        local nextRoom = dungeon.rooms[dungeon.current_room + 1]
+        --local nextRoom = dungeon.rooms[dungeon.current_room + 1]
         --p.collider:setLinearVelocity(0, 0) -- Stop player's current movement
         --p.collider:setPosition(p.collider:getX(), nextRoom:gen_position_y(h) + nextRoom.height - 100)
         dungeon.changing_room = true
@@ -51,7 +51,7 @@ function beginContact(collider1, collider2, collision)
       if dungeon.current_room == 1 then
         dungeon.changing_room = false
       else
-        local prevRoom = dungeon.rooms[dungeon.current_room - 1]
+        --local prevRoom = dungeon.rooms[dungeon.current_room - 1]
         --p.collider:setLinearVelocity(0, 0) -- Stop player's current movement
         --p.collider:setPosition(p.collider:getX(), prevRoom:gen_position_y(h) + prevRoom.height + 100)
         dungeon.changing_room = true

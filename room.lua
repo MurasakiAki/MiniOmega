@@ -21,6 +21,9 @@ function room:new()
     new_room.forward_door = {x = 0, y = 0}
     new_room.back_door = {x = 0, y = 0}
 
+    new_room.has_started = false
+    new_room.encounter_time = math.random(60, 120)
+
     --setting the rooms tileset
     local numRows = math.floor(new_room.height / 64)
     local numCols = math.floor(new_room.width / 64)
@@ -39,6 +42,12 @@ function room:new()
     end
 
     return new_room
+end
+
+function room:draw_counter()
+    if self.has_started == false and self.is_special == false then
+        
+    end
 end
 
 function room:gen_position_x(screen_width)

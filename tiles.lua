@@ -89,8 +89,6 @@ function Tiles:mousepressed(x, y, button, player)
             if tile.is_watered == false and tile.is_plowed == true then
                 tile.image = love.graphics.newImage("textures/tiles/field2.png") -- Assign the "field2.png" image to the tile
                 tile.is_watered = true
-            else
-                -- If the tile doesn't have the "field1.png" image, do nothing
             end
         end
     end
@@ -105,10 +103,7 @@ function Tiles:mousepressed(x, y, button, player)
             -- Change the image of the clicked tile
             local tile = self[col][row]
             if tile.is_watered == true and tile.is_plowed == true then
-
                 tile.has_seed = true
-            else
-                -- If the tile doesn't have the "field1.png" image, do nothing
             end
         end
     end
