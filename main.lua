@@ -29,7 +29,7 @@ function beginContact(collider1, collider2, collision)
   local object1 = collider1:getUserData()
   local object2 = collider2:getUserData()
  
-  if object1 and object1.type == "Player" and object2 and object2.type == "Door" or
+  if dungeon.rooms[dungeon.current_room].active_doors == true and object1 and object1.type == "Player" and object2 and object2.type == "Door" or
     object2 and object2.type == "Player" and object1 and object1.type == "Door" then
  
     local p = object1.type == "Player" and object1 or object2 -- Get the player object
@@ -128,7 +128,7 @@ function love.draw()
   love.graphics.print(string.format("room x: %f , y: %f", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h)), 0, 45)
   love.graphics.print(string.format("tileset x: %d , y: %d", dungeon.rooms[dungeon.current_room].tileset.x, dungeon.rooms[dungeon.current_room].tileset.y), 0, 60)
   love.graphics.print(string.format("is room special: %s", tostring(dungeon.rooms[dungeon.current_room].is_special)), 0, 75)
-  love.graphics.print(string.format("player's hand: %s", p.in_hand), 0, 90)
-   
+  love.graphics.print(string.format("active doors: %s", tostring(dungeon.rooms[dungeon.current_room].active_doors), 0, 90)) 
+  love.graphics.print(string.format("player's hand: %s", p.in_hand), 0, 105)
 
 end

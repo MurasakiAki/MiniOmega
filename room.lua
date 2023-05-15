@@ -71,6 +71,7 @@ function room:draw_prepare_counter()
             self.active_doors = true
         end
     end
+    print(self.active_doors)
 end
 
 function room:gen_position_x(screen_width)

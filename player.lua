@@ -21,7 +21,6 @@ function player:new(world, x, y)
 
   p.collider = world:newRectangleCollider(p.x, p.y, p.width, p.height)
   p.collider:setFixedRotation(true)
-
   p.collider:setUserData(p)
   
   return p
