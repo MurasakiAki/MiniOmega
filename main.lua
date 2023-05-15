@@ -79,7 +79,11 @@ function love.update(dt)
   --updating position of doors
   fdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].forward_door.x, dungeon.rooms[dungeon.current_room].forward_door.y)
   bdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].back_door.x, dungeon.rooms[dungeon.current_room].back_door.y)
-   
+
+
+  --fdoor.collider:setEnabled(dungeon.rooms[dungeon.current_room].active_doors)
+  --bdoor.collider:setEnabled(dungeon.rooms[dungeon.current_room].active_doors)
+
 end
  
 function love.draw()
@@ -92,9 +96,11 @@ function love.draw()
   world:draw()
   p:draw()
  
-  fdoor:draw()
-  bdoor:draw()
- 
+  if dungeon.rooms[dungeon.current_room].active_doors == true then
+    fdoor:draw()
+    bdoor:draw()
+  end
+
   --draw room function
   local draw_room = function()
     love.graphics.rectangle("fill", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h), dungeon.rooms[dungeon.current_room].width, dungeon.rooms[dungeon.current_room].height)
@@ -111,7 +117,9 @@ function love.draw()
   -- reset the stencil buffer
   love.graphics.setStencilTest()
   love.graphics.stencil(function() end)
- 
+
+  dungeon.rooms[dungeon.current_room]:draw_prepare_counter()
+
   -- drawing info
   love.graphics.setColor(1, 1, 1)
   love.graphics.print(string.format("screen width: %d , height: %d", w, h))
@@ -122,4 +130,5 @@ function love.draw()
   love.graphics.print(string.format("is room special: %s", tostring(dungeon.rooms[dungeon.current_room].is_special)), 0, 75)
   love.graphics.print(string.format("player's hand: %s", p.in_hand), 0, 90)
    
+
 end
