@@ -9,7 +9,7 @@ PV MiniOmega
 1.1.1 implement special rooms:
 chest room or shop
 2. make doors X
-3. make time cycle
+3. make time cycle X
 4. make farmables
 4.1. fields X
 4.2. shadows
