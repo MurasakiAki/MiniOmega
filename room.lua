@@ -3,6 +3,8 @@ Tiles = require('tiles')
 
 local screen_width, screen_height = love.window.getDesktopDimensions(1)
 
+math.randomseed(os.time()) -- Set the random seed only once at the start
+
 room = {
     width = 0,
     height = 0,
@@ -10,7 +12,6 @@ room = {
     is_special = false,
     counter = 0,
     timer = 0,
-    encounter_time = 0,  -- Initialize encounter_time
     countdown_timer = 0,  -- Initialize countdown_timer
 }
 
@@ -27,24 +28,22 @@ function room:new()
     new_room.back_door = {x = 0, y = 0}
 
     new_room.has_started = false
-    --math.randomseed(os.time())
-    new_room.encounter_time = math.random(6, 12)
+    new_room.encounter_time = math.random(60, 120)
 
-    --setting the rooms tileset
+    -- Setting the room's tileset
     local numRows = math.floor(new_room.height / 64)
     local numCols = math.floor(new_room.width / 64)
     
     new_room.tileset = Tiles:new(64, 64, numCols, numRows, new_room:gen_position_x(screen_width), new_room:gen_position_y(screen_height))
     
-    --if room will be special room
-    math.randomseed(os.time())
+    -- If the room will be a special room
     local special_chance = math.random(1, 10)
 
     if special_chance == 7 then
         new_room.is_special = true
     end
 
-    if new_room.is_special == true then
+    if new_room.is_special then
         new_room.tileset.is_clickable = false
         new_room.active_doors = true
     end
@@ -79,21 +78,20 @@ function room:draw_prepare_counter()
 end
 
 function room:start_encounter()
-    if self.encounter_time > 0 then
-        self.countdown_timer = self.countdown_timer - love.timer.getDelta()
+    if self.encounter_time == 0 then
+        love.graphics.setColor(0.75, 0.2, 0.1)
+        love.graphics.print("Room Cleared!", screen_width / 2, 15)
+        self.active_doors = true
+    else
         if self.countdown_timer <= 0 then
             self.encounter_time = self.encounter_time - 1
             self.countdown_timer = 1  -- Reset countdown timer to 1 second
         end
+        self.countdown_timer = self.countdown_timer - love.timer.getDelta()
         love.graphics.setColor(0.75, 0.2, 0.1)
         love.graphics.print(tostring(self.encounter_time), screen_width / 2, 15)
-    else
-        love.graphics.setColor(0.75, 0.2, 0.1)
-        love.graphics.print("Room Cleared!", screen_width / 2, 15)
-        self.active_doors = true
     end
 end
-
 
 
 function room:gen_position_x(screen_width)
@@ -105,5 +103,7 @@ function room:gen_position_y(screen_height)
     position_y = (screen_height/2) - (self.height/2)
     return position_y
 end
+
+
 
 return room
