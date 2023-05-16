@@ -22,6 +22,8 @@ function Object:new(x, y, width, height, object_type, is_breakable,
     can_deal_damage, is_movable, health, damage_range_min, damage_range_max, 
     image)
 
+    --can make entirely new object
+
     local o = setmetatable({}, Object)
 
     o.x = x
@@ -38,5 +40,11 @@ function Object:new(x, y, width, height, object_type, is_breakable,
     o.image = image
 
     --collider
+
+end
+
+function Object:new_from_prefab()
+
+    --based on object_type will be set up new object
 
 end
