@@ -8,6 +8,8 @@ room = {
     height = 0,
     tileset = nil,
     is_special = false,
+    counter = 0,
+    timer = 0,
     encounter_time = 0,  -- Initialize encounter_time
     countdown_timer = 0,  -- Initialize countdown_timer
 }
@@ -25,6 +27,7 @@ function room:new()
     new_room.back_door = {x = 0, y = 0}
 
     new_room.has_started = false
+    math.randomseed(os.time())
     new_room.encounter_time = math.random(60, 120)
 
     --setting the rooms tileset
