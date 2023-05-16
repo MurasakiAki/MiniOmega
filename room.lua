@@ -27,8 +27,8 @@ function room:new()
     new_room.back_door = {x = 0, y = 0}
 
     new_room.has_started = false
-    math.randomseed(os.time())
-    new_room.encounter_time = math.random(60, 120)
+    --math.randomseed(os.time())
+    new_room.encounter_time = math.random(6, 12)
 
     --setting the rooms tileset
     local numRows = math.floor(new_room.height / 64)
