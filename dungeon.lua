@@ -12,7 +12,7 @@ Dungeon = {
 }
 
 function Dungeon:new (world)
-    self.size = love.math.random(5, 10)
+    self.size = love.math.random(5, 15)
     for i = 1, self.size do
         local new_room = room:new()
         table.insert(self.rooms, new_room)
@@ -48,10 +48,6 @@ function Dungeon:new (world)
     end
 
     return self
-end
-
-function Dungeon:change_room(player)
-    player.collider:setPosition()
 end
 
 return Dungeon

@@ -7,7 +7,9 @@ room = {
     width = 0,
     height = 0,
     tileset = nil,
-    is_special = false
+    is_special = false,
+    encounter_time = 0,  -- Initialize encounter_time
+    countdown_timer = 0,  -- Initialize countdown_timer
 }
 
 function room:new()
@@ -68,11 +70,28 @@ function room:draw_prepare_counter()
         else
             love.graphics.setColor(0.75, 0.2, 0.1)
             love.graphics.print("Encounter!", screen_width / 2, 0)
-            self.active_doors = true
+            self:start_encounter()
         end
     end
-    print(self.active_doors)
 end
+
+function room:start_encounter()
+    if self.encounter_time > 0 then
+        self.countdown_timer = self.countdown_timer - love.timer.getDelta()
+        if self.countdown_timer <= 0 then
+            self.encounter_time = self.encounter_time - 1
+            self.countdown_timer = 1  -- Reset countdown timer to 1 second
+        end
+        love.graphics.setColor(0.75, 0.2, 0.1)
+        love.graphics.print(tostring(self.encounter_time), screen_width / 2, 15)
+    else
+        love.graphics.setColor(0.75, 0.2, 0.1)
+        love.graphics.print("Room Cleared!", screen_width / 2, 15)
+        self.active_doors = true
+    end
+end
+
+
 
 function room:gen_position_x(screen_width)
     position_x = (screen_width/2) - (self.width/2)

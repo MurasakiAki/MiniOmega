@@ -15,6 +15,9 @@ function love.load()
   -- This function is called once at the beginning of the game
   love.window.setFullscreen(true, "desktop")
   
+  world:addCollisionClass('Player')
+  world:addCollisionClass('Door')
+
   dungeon = Dungeon:new(world)
  
   p = player:new(world, w/2, h/2)
@@ -73,9 +76,11 @@ end
  
 function love.update(dt)
   world:update(dt)
- 
+  
+  p:update(dungeon)
+  
   p:move(dungeon.rooms[dungeon.current_room])
- 
+  
   --updating position of doors
   fdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].forward_door.x, dungeon.rooms[dungeon.current_room].forward_door.y)
   bdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].back_door.x, dungeon.rooms[dungeon.current_room].back_door.y)
@@ -123,12 +128,12 @@ function love.draw()
   -- drawing info
   love.graphics.setColor(1, 1, 1)
   love.graphics.print(string.format("screen width: %d , height: %d", w, h))
-  love.graphics.print(string.format("current room: %d", dungeon.current_room), 0, 15)
+  love.graphics.print(string.format("current room: %d / dungeon size: %d", dungeon.current_room, dungeon.size), 0, 15)
   love.graphics.print(string.format("room width: %f , height: %f", dungeon.rooms[dungeon.current_room].width, dungeon.rooms[dungeon.current_room].height), 0, 30)
   love.graphics.print(string.format("room x: %f , y: %f", dungeon.rooms[dungeon.current_room]:gen_position_x(w), dungeon.rooms[dungeon.current_room]:gen_position_y(h)), 0, 45)
   love.graphics.print(string.format("tileset x: %d , y: %d", dungeon.rooms[dungeon.current_room].tileset.x, dungeon.rooms[dungeon.current_room].tileset.y), 0, 60)
   love.graphics.print(string.format("is room special: %s", tostring(dungeon.rooms[dungeon.current_room].is_special)), 0, 75)
-  love.graphics.print(string.format("active doors: %s", tostring(dungeon.rooms[dungeon.current_room].active_doors), 0, 90)) 
+  love.graphics.print(string.format("active doors: %s", tostring(dungeon.rooms[dungeon.current_room].active_doors)), 0, 90) 
   love.graphics.print(string.format("player's hand: %s", p.in_hand), 0, 105)
 
 end

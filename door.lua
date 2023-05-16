@@ -15,7 +15,8 @@ function Door:new(world, x, y, special_type)
     d.collider = world:newRectangleCollider(d.x, d.y, d.width, d.height)
     d.collider:setFixedRotation(true)
     d.collider:setType('static')
-
+    d.collider:setSensor(true)
+    d.collider:setCollisionClass('Door')
     d.collider:setUserData(d)
 
     return d

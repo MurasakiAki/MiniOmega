@@ -22,6 +22,7 @@ function player:new(world, x, y)
   p.collider = world:newRectangleCollider(p.x, p.y, p.width, p.height)
   p.collider:setFixedRotation(true)
   p.collider:setUserData(p)
+  p.collider:setCollisionClass('Player')
   
   return p
 end
@@ -82,6 +83,13 @@ function player:move(room)
     self.collider:setPosition(self.x, self.y)
   end
 
+end
+
+function player:update(dungeon)
+  if self.collider:enter('Door') then
+    self.x = screen_width/2 - self.width/2
+    self.y = screen_height/2 - self.height/2
+  end
 end
 
 --function for cycling through items (hoe, watering can, seeds)
