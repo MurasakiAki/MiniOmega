@@ -6,6 +6,7 @@ Dungeon = require("dungeon")
 room = require('room')
 Door = require('door')
 Tiles = require('tiles')
+Object = require('object')
  
 local w, h = love.window.getDesktopDimensions(1)
  
@@ -17,6 +18,9 @@ function love.load()
   
   world:addCollisionClass('Player')
   world:addCollisionClass('Door')
+  world:addCollisionClass('Object')
+  world:addCollisionClass('Obstacle')
+  world:addCollisionClass('Trap')
 
   dungeon = Dungeon:new(world)
   
@@ -27,6 +31,8 @@ function love.load()
   p = player:new(world, w/2, h/2)
   fdoor = Door:new(world, 0, 0, "Forward")
   bdoor = Door:new(world, 0, 0, "Back")
+  movable_box = Object:new_from_prefab(world, w/2 - 30, 250, 'MovableBox')
+  rock = Object:new_from_prefab(world,  400, 400, 'Rock')
    
   world:setCallbacks(beginContact, nil, nil, nil)
 end

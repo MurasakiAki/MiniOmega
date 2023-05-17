@@ -10,6 +10,7 @@ room = {
     height = 0,
     tileset = nil,
     is_special = false,
+    objects = {},
     counter = 0,
     timer = 0,
     countdown_timer = 0,  -- Initialize countdown_timer
