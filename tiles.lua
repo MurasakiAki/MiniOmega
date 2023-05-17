@@ -2,7 +2,7 @@ local Tiles = {}
 local grassImages = {"grass1.png", "grass2.png", "grass3.png", "grass4.png", "grass5.png", "grass6.png", "grass7.png", "grass8.png"}
 local imageScale = 4 -- Scale factor for the images
 
-function Tiles:new(tileWidth, tileHeight, numCols, numRows, x, y)
+function Tiles:new(world, tileWidth, tileHeight, numCols, numRows, x, y)
     local tiles = {}
 
     -- Initialize the tiles table with default values
@@ -11,7 +11,11 @@ function Tiles:new(tileWidth, tileHeight, numCols, numRows, x, y)
         for j = 1, numRows do
             local randomImage = love.graphics.newImage("textures/tiles/" .. grassImages[love.math.random(1, #grassImages)])
             randomImage:setFilter("nearest", "nearest") -- Set filter mode to "nearest"
-            tiles[i][j] = {x = x + (i - 1) * tileWidth, y = y + (j - 1) * tileHeight, image = randomImage, saved_image = nil, is_plowed = false, is_watered = false, has_seed = false}
+            local tileX = x + (i - 1) * tileWidth
+            local tileY = y + (j - 1) * tileHeight
+            tiles[i][j] = {x = tileX, y = tileY, tileWidth = tileWidth, tileHeight = tileHeight, image = randomImage, saved_image = nil, is_plowed = false, is_watered = false, has_seed = false}
+            tiles[i][j].collider = world:newRectangleCollider(tileX, tileY, tileWidth, tileHeight)
+            tiles[i][j].collider:setSensor(true)
         end
     end
 

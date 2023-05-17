@@ -16,7 +16,7 @@ room = {
     countdown_timer = 0,  -- Initialize countdown_timer
 }
 
-function room:new()
+function room:new(world)
     local new_room = {}
     setmetatable(new_room, self)
     self.__index = self
@@ -35,7 +35,7 @@ function room:new()
     local numRows = math.floor(new_room.height / 64)
     local numCols = math.floor(new_room.width / 64)
     
-    new_room.tileset = Tiles:new(64, 64, numCols, numRows, new_room:gen_position_x(screen_width), new_room:gen_position_y(screen_height))
+    new_room.tileset = Tiles:new(world, 64, 64, numCols, numRows, new_room:gen_position_x(screen_width), new_room:gen_position_y(screen_height))
     
     -- If the room will be a special room
     local special_chance = math.random(1, 10)

@@ -14,7 +14,7 @@ Dungeon = {
 function Dungeon:new (world)
     self.size = love.math.random(5, 15)
     for i = 1, self.size do
-        local new_room = room:new()
+        local new_room = room:new(world)
         table.insert(self.rooms, new_room)
     end
 

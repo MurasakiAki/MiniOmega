@@ -101,8 +101,8 @@ function Object:new_from_prefab(world, x, y, object_type)
     end
 
     if object_type == "Rock" then
-        o.width = math.random(32, 128)
-        o.height = math.random(32, 128)
+        o.width = 128
+        o.height = 128
         o.is_breakable = false
         o.can_deal_damage = false
         o.is_movable = false
