@@ -21,6 +21,7 @@ function love.load()
   world:addCollisionClass('Object')
   world:addCollisionClass('Obstacle')
   world:addCollisionClass('Trap')
+  world:addCollisionClass('Tile')
 
   dungeon = Dungeon:new(world)
   
@@ -31,9 +32,8 @@ function love.load()
   p = player:new(world, w/2, h/2)
   fdoor = Door:new(world, 0, 0, "Forward")
   bdoor = Door:new(world, 0, 0, "Back")
-  movable_box = Object:new_from_prefab(world, w/2 - 30, 250, 'MovableBox')
-  rock = Object:new_from_prefab(world,  400, 400, 'Rock')
-   
+  --movable_box = Object:new_from_prefab(world, w/2 - 30, 250, 'MovableBox')
+  --rock = Object:new_from_prefab(world,  400, 400, 'Rock')
   world:setCallbacks(beginContact, nil, nil, nil)
 end
  
@@ -86,7 +86,7 @@ end
  
 function love.update(dt)
   world:update(dt)
-  
+  --dungeon.rooms[dungeon.current_room].tileset:update()
   p:update(dungeon)
   
   p:move(dungeon.rooms[dungeon.current_room])
