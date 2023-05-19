@@ -1,4 +1,5 @@
 local wf = require 'lib/windfield'
+local Crop = require('crop')
 
 local Tiles = {}
 local grassImages = {"grass1.png", "grass2.png", "grass3.png", "grass4.png", "grass5.png", "grass6.png", "grass7.png", "grass8.png"}
@@ -20,7 +21,7 @@ function Tiles:new(world, tileWidth, tileHeight, numCols, numRows, x, y)
         randomImage:setFilter("nearest", "nearest") -- Set filter mode to "nearest"
         local tileX = x + (i - 1) * tileWidth
         local tileY = y + (j - 1) * tileHeight
-        tiles[i][j] = {x = tileX, y = tileY, tileWidth = tileWidth, tileHeight = tileHeight, image = randomImage, saved_image = nil, is_plowed = false, is_watered = false, has_seed = false, is_obscured = false}
+        tiles[i][j] = {x = tileX, y = tileY, tileWidth = tileWidth, tileHeight = tileHeight, image = randomImage, saved_image = nil, is_plowed = false, is_watered = false, has_seed = false, is_obscured = false, planted_seed = nil}
         --tiles[i][j].collider = world:newRectangleCollider(tileX, tileY, tileWidth, tileHeight)
         --tiles[i][j].collider:setSensor(true)
         --tiles[i][j].collider:setCollisionClass('Tile') -- Set the collision class to 'Tile'
@@ -51,11 +52,13 @@ function Tiles:draw()
             end
 
             love.graphics.draw(tile.image, tile.x, tile.y, 0, imageScale, imageScale)
+            
         end
     end
+    
 end
 
-function Tiles:mousepressed(x, y, button, player)
+function Tiles:mousepressed(world, x, y, button, player)
 
     local px, py = player.collider:getPosition()
     local mx, my = love.mouse.getPosition()
@@ -112,7 +115,12 @@ function Tiles:mousepressed(x, y, button, player)
             -- Change the image of the clicked tile
             local tile = self[col][row]
             if tile.is_watered == true and tile.is_plowed == true then
-                tile.has_seed = true
+                
+                if tile.has_seed == false then
+                    tile.has_seed = true
+                    seed = Crop:new(world, tile.x + tile.tileWidth/2 - 8, tile.y + tile.tileHeight/2 - 8, "Crop", 2 )
+                    tile.planted_seed = seed
+                end
             end
         end
     end

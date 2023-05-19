@@ -7,6 +7,7 @@ room = require('room')
 Door = require('door')
 Tiles = require('tiles')
 Object = require('object')
+Crop = require('crop')
  
 local w, h = love.window.getDesktopDimensions(1)
  
@@ -76,7 +77,7 @@ end
  
  --mouse controller
 function love.mousepressed(x, y, button)
-  dungeon.rooms[dungeon.current_room].tileset:mousepressed(x, y, button, p)
+  dungeon.rooms[dungeon.current_room].tileset:mousepressed(world, x, y, button, p)
 end
 
 --keypress detection
@@ -109,8 +110,8 @@ function love.draw()
   dungeon.rooms[dungeon.current_room].tileset:draw()
   
   world:draw()
+
   p:draw()
- 
   if dungeon.rooms[dungeon.current_room].active_doors == true then
     fdoor:draw()
     bdoor:draw()
