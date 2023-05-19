@@ -26,10 +26,12 @@ function love.load()
 
   dungeon = Dungeon:new(world)
   
+  --[[
   for i = 1, dungeon.size, 1 do
     print(dungeon.rooms[i].encounter_time)
   end
-
+  ]]
+  
   p = player:new(world, w/2, h/2)
   fdoor = Door:new(world, 0, 0, "Forward")
   bdoor = Door:new(world, 0, 0, "Back")
