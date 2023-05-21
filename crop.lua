@@ -1,5 +1,7 @@
 love = require('love')
 windfield = require('lib/windfield')
+socket = require('socket')
+
 
 local Crop = {}
 
@@ -22,16 +24,20 @@ function Crop:new(world, x, y, name, phase_time)
     return c
 end
 
-function Crop:start_growth()
-    local thread_code = [[
+function Crop:start_growth(tile)
+    local growthCoroutine = coroutine.create(function()
+            
+        self.current_phase = self.current_phase + 1
+        change_field_state(tile)
+            
+        -- Print the current phase
+        print("Current phase:", self.current_phase)
+            
+        coroutine.yield()
+        
+    end)
 
-    local wait_time, phase = ...
-
-    
-
-    ]]
-    local thread = love.thread.newThread()
-
+    coroutine.resume(growthCoroutine)
 end
 
 return Crop

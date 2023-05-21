@@ -120,6 +120,7 @@ function Tiles:mousepressed(world, x, y, button, player)
                     tile.has_seed = true
                     seed = Crop:new(world, tile.x + tile.tileWidth/2 - 8, tile.y + tile.tileHeight/2 - 8, "Crop", 2 )
                     tile.planted_seed = seed
+                    seed:start_growth(tile)
                 end
             end
         end
@@ -127,6 +128,7 @@ function Tiles:mousepressed(world, x, y, button, player)
 
 end
 
+--detecting obstacle on field
 --[[
 function Tiles:update()
     for i = 1, #self do
@@ -142,4 +144,5 @@ function Tiles:update()
     end
 end
 ]]
+
 return Tiles

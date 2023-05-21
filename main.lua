@@ -1,5 +1,6 @@
 --the game
 love = require('love')
+glob = require('global')
 player = require("player")
 windfield = require('lib/windfield')
 Dungeon = require("dungeon")
@@ -35,7 +36,7 @@ function love.load()
   p = player:new(world, w/2, h/2)
   fdoor = Door:new(world, 0, 0, "Forward")
   bdoor = Door:new(world, 0, 0, "Back")
-  --movable_box = Object:new_from_prefab(world, w/2 - 30, 250, 'MovableBox')
+  movable_box = Object:new_from_prefab(world, w/2 - 30, 250, 'MovableBox')
   --rock = Object:new_from_prefab(world,  400, 400, 'Rock')
   world:setCallbacks(beginContact, nil, nil, nil)
 end
@@ -101,7 +102,7 @@ function love.update(dt)
 
   --fdoor.collider:setEnabled(dungeon.rooms[dungeon.current_room].active_doors)
   --bdoor.collider:setEnabled(dungeon.rooms[dungeon.current_room].active_doors)
-
+  
 end
  
 function love.draw()
