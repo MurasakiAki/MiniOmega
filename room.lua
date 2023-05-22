@@ -87,6 +87,22 @@ function room:start_encounter()
         if self.countdown_timer <= 0 then
             self.encounter_time = self.encounter_time - 1
             self.countdown_timer = 1  -- Reset countdown timer to 1 second
+
+            -- Iterate through the tileset and perform an action on each tile
+            for i = 1, #self.tileset do
+                for j = 1, #self.tileset[i] do
+                    local tile = self.tileset[i][j]
+
+                    local chance = love.math.random(1, 10)
+
+                    if tile.has_seed then
+                        if chance <= tile.planted_seed.dry_chance then
+                            tile.planted_seed:grow(tile)
+                        end
+                    end
+                end
+            end
+
         end
         self.countdown_timer = self.countdown_timer - love.timer.getDelta()
         love.graphics.setColor(0.75, 0.2, 0.1)

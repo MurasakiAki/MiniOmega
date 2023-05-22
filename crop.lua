@@ -2,7 +2,7 @@ local Crop = {}
 
 Crop.__index = Crop
 
-function Crop:new(world, x, y, name, phase_time)
+function Crop:new(world, x, y, name, dry_chance)
     local c = setmetatable({}, Crop)
 
     c.x = x
@@ -11,7 +11,7 @@ function Crop:new(world, x, y, name, phase_time)
     c.height = 16
     
     c.name = name
-    c.phase_time = phase_time
+    c.dry_chance = dry_chance
     c.current_phase = 1
     c.is_grown = false
     c.collider = world:newRectangleCollider(c.x, c.y, c.width, c.height)
