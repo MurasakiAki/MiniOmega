@@ -33,6 +33,8 @@ function love.load()
   end
   ]]
   
+  
+
   p = player:new(world, w/2, h/2)
   fdoor = Door:new(world, 0, 0, "Forward")
   bdoor = Door:new(world, 0, 0, "Back")

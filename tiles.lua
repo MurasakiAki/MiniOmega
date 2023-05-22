@@ -98,8 +98,13 @@ function Tiles:mousepressed(world, x, y, button, player)
         if self[col] and self[col][row] then
             -- Change the image of the clicked tile
             local tile = self[col][row]
-            if tile.is_watered == false and tile.is_plowed == true then
-                tile.image = love.graphics.newImage("textures/tiles/field2.png") -- Assign the "field2.png" image to the tile
+            if tile.is_watered == false and tile.is_plowed == true and tile.has_seed == false then
+                tile.image = love.graphics.newImage("textures/tiles/field2.png")
+                tile.is_watered = true
+            end
+
+            if tile.is_watered == false and tile.is_plowed == true and tile.has_seed == true then
+                tile.image = love.graphics.newImage("textures/tiles/field2.png") 
                 tile.is_watered = true
             end
         end
@@ -118,9 +123,7 @@ function Tiles:mousepressed(world, x, y, button, player)
                 
                 if tile.has_seed == false then
                     tile.has_seed = true
-                    seed = Crop:new(world, tile.x + tile.tileWidth/2 - 8, tile.y + tile.tileHeight/2 - 8, "Crop", 2 )
-                    tile.planted_seed = seed
-                    seed:start_growth(tile)
+                    tile.planted_seed = Crop:new(world, tile.x + tile.tileWidth/2 - 8, tile.y + tile.tileHeight/2 - 8, "Crop", 2 )
                 end
             end
         end

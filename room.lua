@@ -55,7 +55,7 @@ end
 function room:draw_prepare_counter()
     if not self.has_started and not self.is_special then
         self.has_started = true
-        self.counter = 8
+        self.counter = 10
         self.timer = 0
     end
 
@@ -104,7 +104,5 @@ function room:gen_position_y(screen_height)
     position_y = (screen_height/2) - (self.height/2)
     return position_y
 end
-
-
 
 return room

@@ -1,8 +1,3 @@
-love = require('love')
-windfield = require('lib/windfield')
-socket = require('socket')
-
-
 local Crop = {}
 
 Crop.__index = Crop
@@ -17,27 +12,29 @@ function Crop:new(world, x, y, name, phase_time)
     
     c.name = name
     c.phase_time = phase_time
-    c.current_phase = 1 --phase 1 = seed, phase 2 = middle, phase 3 = crop
+    c.current_phase = 1
+    c.is_grown = false
     c.collider = world:newRectangleCollider(c.x, c.y, c.width, c.height)
     c.collider:setType('static')
     c.collider:setSensor(true)
     return c
 end
 
-function Crop:start_growth(tile)
-    local growthCoroutine = coroutine.create(function()
-            
+function Crop:grown_check()
+    if self.current_phase == 3 then
+        self.is_grown = true
+    end
+end
+
+function Crop:grow(tile)
+    if self.is_grown ~= true then
         self.current_phase = self.current_phase + 1
         change_field_state(tile)
-            
+    
+        self:grown_check()
         -- Print the current phase
         print("Current phase:", self.current_phase)
-            
-        coroutine.yield()
-        
-    end)
-
-    coroutine.resume(growthCoroutine)
+    end
 end
 
 return Crop
