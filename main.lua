@@ -20,6 +20,8 @@ function love.load()
   
   world:addCollisionClass('Player')
   world:addCollisionClass('Door')
+  world:addCollisionClass('Crop')
+  world:addCollisionClass('Enemy')
   world:addCollisionClass('Object')
   world:addCollisionClass('Obstacle')
   world:addCollisionClass('Trap')
@@ -33,6 +35,7 @@ function love.load()
   bdoor = Door:new(world, 0, 0, "Back")
 
   movable_box = Object:new_from_prefab(world, w/2 - 30, 250, 'MovableBox')
+  table.insert(dungeon.rooms[dungeon.current_room].objects, movable_box)
   --rock = Object:new_from_prefab(world,  400, 400, 'Rock')
 
   world:setCallbacks(beginContact, nil, nil, nil)
@@ -75,8 +78,12 @@ function beginContact(collider1, collider2, collision)
       end
     end
   end
+
+  if object1.type == "Crop" and object2.type == "Enemy" or 
+  object1.type == "Enemy" and object2.type == "Crop" then
+
+  end
 end
- 
  --mouse controller
 function love.mousepressed(x, y, button)
   dungeon.rooms[dungeon.current_room].tileset:mousepressed(world, x, y, button, p)
@@ -97,15 +104,10 @@ function love.update(dt)
   --updating position of doors
   fdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].forward_door.x, dungeon.rooms[dungeon.current_room].forward_door.y)
   bdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].back_door.x, dungeon.rooms[dungeon.current_room].back_door.y)
-
-
-  --fdoor.collider:setEnabled(dungeon.rooms[dungeon.current_room].active_doors)
-  --bdoor.collider:setEnabled(dungeon.rooms[dungeon.current_room].active_doors)
   
 end
  
 function love.draw()
-  -- This function is called every frame and is used for drawing to the screen
   --drawing objects in the scene
   love.graphics.setBackgroundColor(0, 0.4, 0.4)
 

@@ -110,7 +110,6 @@ function room:start_encounter()
     end
 end
 
-
 function room:gen_position_x(screen_width)
     position_x = (screen_width/2) - (self.width/2)
     return position_x

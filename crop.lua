@@ -15,8 +15,11 @@ function Crop:new(world, x, y, name, dry_chance)
     c.current_phase = 0
     c.is_grown = false
     c.collider = world:newRectangleCollider(c.x, c.y, c.width, c.height)
+    c.collider:setCollisionClass('Crop')
+    c.type = "Crop"
     c.collider:setType('static')
     c.collider:setSensor(true)
+    c.collider:setUserData(c)
     return c
 end
 
