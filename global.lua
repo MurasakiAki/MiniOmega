@@ -10,3 +10,17 @@ function change_field_state(tile)
         tile.is_watered = true
     end
 end
+
+function on_change_room(tileset)
+    for i = 1, #tileset do
+        for j = 1, #tileset[i] do
+            local tile = tileset[i][j]
+
+            -- Destroy crop if player forgets to harvest them
+            if tile.has_seed then
+                tile.planted_seed.collider:destroy()
+                tile.has_seed = false
+            end
+        end
+    end
+end

@@ -13,7 +13,7 @@ room = {
     objects = {},
     counter = 0,
     timer = 0,
-    countdown_timer = 0,  -- Initialize countdown_timer
+    countdown_timer = 0
 }
 
 function room:new(world)
@@ -88,7 +88,7 @@ function room:start_encounter()
             self.encounter_time = self.encounter_time - 1
             self.countdown_timer = 1  -- Reset countdown timer to 1 second
 
-            -- Iterate through the tileset and perform an action on each tile
+            -- Iterate through the tileset
             for i = 1, #self.tileset do
                 for j = 1, #self.tileset[i] do
                     local tile = self.tileset[i][j]

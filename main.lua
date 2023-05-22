@@ -27,19 +27,14 @@ function love.load()
 
   dungeon = Dungeon:new(world)
   
-  --[[
-  for i = 1, dungeon.size, 1 do
-    print(dungeon.rooms[i].encounter_time)
-  end
-  ]]
-  
-  
-
   p = player:new(world, w/2, h/2)
+
   fdoor = Door:new(world, 0, 0, "Forward")
   bdoor = Door:new(world, 0, 0, "Back")
+
   movable_box = Object:new_from_prefab(world, w/2 - 30, 250, 'MovableBox')
   --rock = Object:new_from_prefab(world,  400, 400, 'Rock')
+
   world:setCallbacks(beginContact, nil, nil, nil)
 end
  
@@ -63,6 +58,7 @@ function beginContact(collider1, collider2, collision)
         --p.collider:setLinearVelocity(0, 0) -- Stop player's current movement
         --p.collider:setPosition(p.collider:getX(), nextRoom:gen_position_y(h) + nextRoom.height - 100)
         dungeon.changing_room = true
+        on_change_room(dungeon.rooms[dungeon.current_room].tileset)
         dungeon.current_room = dungeon.current_room + 1
       end
  
@@ -74,6 +70,7 @@ function beginContact(collider1, collider2, collision)
         --p.collider:setLinearVelocity(0, 0) -- Stop player's current movement
         --p.collider:setPosition(p.collider:getX(), prevRoom:gen_position_y(h) + prevRoom.height + 100)
         dungeon.changing_room = true
+        on_change_room(dungeon.rooms[dungeon.current_room].tileset)
         dungeon.current_room = dungeon.current_room - 1
       end
     end
