@@ -93,9 +93,9 @@ function room:start_encounter()
                 for j = 1, #self.tileset[i] do
                     local tile = self.tileset[i][j]
 
-                    local chance = love.math.random(1, 10)
+                    local chance = love.math.random(0, 100)
 
-                    if tile.has_seed then
+                    if tile.has_seed and tile.is_watered then
                         if chance <= tile.planted_seed.dry_chance then
                             tile.planted_seed:grow(tile)
                         end

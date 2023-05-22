@@ -12,7 +12,7 @@ function Crop:new(world, x, y, name, dry_chance)
     
     c.name = name
     c.dry_chance = dry_chance
-    c.current_phase = 1
+    c.current_phase = 0
     c.is_grown = false
     c.collider = world:newRectangleCollider(c.x, c.y, c.width, c.height)
     c.collider:setType('static')
