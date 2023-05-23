@@ -105,13 +105,15 @@ function room:start_encounter(world)
                 end
             end
 
-            -- spawning random number of enemies each second
+            -- Spawning random number of enemies each second
             local enemy_chance = love.math.random(1, 100)
             local enemy_count = love.math.random(1, 5)
 
             if enemy_chance <= 25 then
                 for i = 1, enemy_count do
-                    enemy = Enemy:new(world, 250 + i * 64, 250)
+                    local enemy_x = love.math.random(screen_width + 64, screen_width + 256)
+                    local enemy_y = love.math.random(64, screen_height - 128)
+                    enemy = Enemy:new(world, enemy_x, enemy_y)
                     table.insert(self.enemies, enemy)
                 end
             end

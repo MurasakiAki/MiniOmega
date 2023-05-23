@@ -101,6 +101,11 @@ function love.update(dt)
   
   p:move(dungeon.rooms[dungeon.current_room])
   
+  if #dungeon.rooms[dungeon.current_room].enemies >= 1 then
+    for i = 1, #dungeon.rooms[dungeon.current_room].enemies do
+      dungeon.rooms[dungeon.current_room].enemies[i]:move(p.collider:getX(), p.collider:getY())
+    end
+  end
   --updating position of doors
   fdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].forward_door.x, dungeon.rooms[dungeon.current_room].forward_door.y)
   bdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].back_door.x, dungeon.rooms[dungeon.current_room].back_door.y)
