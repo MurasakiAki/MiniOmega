@@ -52,7 +52,9 @@ function Tiles:draw()
             end
 
             love.graphics.draw(tile.image, tile.x, tile.y, 0, imageScale, imageScale)
-            
+            if tile.has_seed then
+                love.graphics.print(string.format("%d", tile.planted_seed.current_phase), tile.x, tile.y)
+            end
         end
     end
     

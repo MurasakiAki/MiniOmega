@@ -61,10 +61,10 @@ function beginContact(collider1, collider2, collision)
         --p.collider:setLinearVelocity(0, 0) -- Stop player's current movement
         --p.collider:setPosition(p.collider:getX(), nextRoom:gen_position_y(h) + nextRoom.height - 100)
         dungeon.changing_room = true
-        on_change_room(dungeon.rooms[dungeon.current_room].tileset)
+        on_change_room(dungeon.rooms[dungeon.current_room])
         dungeon.current_room = dungeon.current_room + 1
       end
- 
+
     else
       if dungeon.current_room == 1 then
         dungeon.changing_room = false
@@ -73,7 +73,7 @@ function beginContact(collider1, collider2, collision)
         --p.collider:setLinearVelocity(0, 0) -- Stop player's current movement
         --p.collider:setPosition(p.collider:getX(), prevRoom:gen_position_y(h) + prevRoom.height + 100)
         dungeon.changing_room = true
-        on_change_room(dungeon.rooms[dungeon.current_room].tileset)
+        on_change_room(dungeon.rooms[dungeon.current_room])
         dungeon.current_room = dungeon.current_room - 1
       end
     end
@@ -138,7 +138,7 @@ function love.draw()
   love.graphics.setStencilTest()
   love.graphics.stencil(function() end)
 
-  dungeon.rooms[dungeon.current_room]:draw_prepare_counter()
+  dungeon.rooms[dungeon.current_room]:draw_prepare_counter(world)
 
   -- drawing info
   love.graphics.setColor(1, 1, 1)

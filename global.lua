@@ -11,7 +11,9 @@ function change_field_state(tile)
     end
 end
 
-function on_change_room(tileset)
+function on_change_room(room)
+    local tileset = room.tileset
+
     for i = 1, #tileset do
         for j = 1, #tileset[i] do
             local tile = tileset[i][j]
@@ -23,4 +25,6 @@ function on_change_room(tileset)
             end
         end
     end
+
+    
 end

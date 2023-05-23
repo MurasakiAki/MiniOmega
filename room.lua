@@ -1,5 +1,6 @@
 require('love')
 Tiles = require('tiles')
+Enemy = require('enemy')
 
 local screen_width, screen_height = love.window.getDesktopDimensions(1)
 
@@ -13,7 +14,8 @@ room = {
     objects = {},
     counter = 0,
     timer = 0,
-    countdown_timer = 0
+    countdown_timer = 0,
+    enemies = {}
 }
 
 function room:new(world)
@@ -52,7 +54,7 @@ function room:new(world)
     return new_room
 end
 
-function room:draw_prepare_counter()
+function room:draw_prepare_counter(world)
     if not self.has_started and not self.is_special then
         self.has_started = true
         self.counter = 10
@@ -73,12 +75,12 @@ function room:draw_prepare_counter()
         else
             love.graphics.setColor(0.75, 0.2, 0.1)
             love.graphics.print("Encounter!", screen_width / 2, 0)
-            self:start_encounter()
+            self:start_encounter(world)
         end
     end
 end
 
-function room:start_encounter()
+function room:start_encounter(world)
     if self.encounter_time == 0 then
         love.graphics.setColor(0.75, 0.2, 0.1)
         love.graphics.print("Room Cleared!", screen_width / 2, 15)
@@ -100,6 +102,17 @@ function room:start_encounter()
                             tile.planted_seed:grow(tile)
                         end
                     end
+                end
+            end
+
+            -- spawning random number of enemies each second
+            local enemy_chance = love.math.random(1, 100)
+            local enemy_count = love.math.random(1, 5)
+
+            if enemy_chance <= 25 then
+                for i = 1, enemy_count do
+                    enemy = Enemy:new(world, 250 + i * 64, 250)
+                    table.insert(self.enemies, enemy)
                 end
             end
 
