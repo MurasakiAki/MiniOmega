@@ -107,14 +107,36 @@ function room:start_encounter(world)
 
             -- Spawning random number of enemies each second
             local enemy_chance = love.math.random(1, 100)
-            local enemy_count = love.math.random(1, 5)
+            local enemy_count = love.math.random(1, 2)
 
             if enemy_chance <= 25 then
                 for i = 1, enemy_count do
-                    local enemy_x = love.math.random(screen_width + 64, screen_width + 256)
-                    local enemy_y = love.math.random(64, screen_height - 128)
-                    enemy = Enemy:new(world, enemy_x, enemy_y)
-                    table.insert(self.enemies, enemy)
+                    -- picking side, on which side should enemy spawn
+                    -- 1 left, 2 top, 3 right, 4 bottom
+                    local room_side = love.math.random(1, 4)
+
+                    if room_side == 1 then
+                        local enemy_x = love.math.random(0, self:gen_position_x(screen_width) - 32)
+                        local enemy_y = love.math.random(0, screen_height)
+                        enemy = Enemy:new(world, enemy_x, enemy_y)
+                        table.insert(self.enemies, enemy)
+                    elseif room_side == 2 then
+                        local enemy_x = love.math.random(0, screen_width)
+                        local enemy_y = love.math.random(0, self:gen_position_y(screen_height) - 32)
+                        enemy = Enemy:new(world, enemy_x, enemy_y)
+                        table.insert(self.enemies, enemy)
+                    elseif room_side == 3 then
+                        local enemy_x = love.math.random(self.width + self:gen_position_x(screen_width), screen_width)
+                        local enemy_y = love.math.random(0, screen_height)
+                        enemy = Enemy:new(world, enemy_x, enemy_y)
+                        table.insert(self.enemies, enemy)
+                    elseif room_side == 4 then
+                        local enemy_x = love.math.random(0, screen_width)
+                        local enemy_y = love.math.random(self.height + self:gen_position_y(screen_height), screen_height)
+                        enemy = Enemy:new(world, enemy_x, enemy_y)
+                        table.insert(self.enemies, enemy)
+                    end
+                    
                 end
             end
 
