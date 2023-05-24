@@ -79,9 +79,12 @@ function beginContact(collider1, collider2, collision)
     end
   end
 
-  if object1.type == "Crop" and object2.type == "Enemy" or 
-  object1.type == "Enemy" and object2.type == "Crop" then
-
+  if object1.type == "Crop" and object2.type == "Enemy" then
+    object1.tile.has_seed = false
+    object1.collider:destroy()
+  elseif object1.type == "Enemy" and object2.type == "Crop" then
+    object2.tile.has_seed = false
+    object2.collider:destroy()
   end
 end
  --mouse controller

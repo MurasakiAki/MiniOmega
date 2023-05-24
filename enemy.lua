@@ -9,7 +9,7 @@ function Enemy:new(world, x, y)
     e.width = 32
     e.height = 32
 
-    e.tpe = "Enemy"
+    e.type = "Enemy"
     e.health = 1
     e.speed = love.math.random(60, 90)
     e.damage = 1

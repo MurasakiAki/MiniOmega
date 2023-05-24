@@ -2,7 +2,7 @@ local Crop = {}
 
 Crop.__index = Crop
 
-function Crop:new(world, x, y, name, dry_chance)
+function Crop:new(world, x, y, name, dry_chance, tile)
     local c = setmetatable({}, Crop)
 
     c.x = x
@@ -11,6 +11,7 @@ function Crop:new(world, x, y, name, dry_chance)
     c.height = 16
     
     c.name = name
+    c.tile = tile
     c.dry_chance = dry_chance
     c.current_phase = 0
     c.is_grown = false
