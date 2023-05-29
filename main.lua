@@ -84,37 +84,37 @@ function beginContact(collider1, collider2, collision)
     object2.collider:destroy()
   end
 
--- Collision between attack and enemy
-if object1.type == "Attack" and object2.type == "Enemy" then
-  object1.collider:destroy()
-  -- Remove the enemy object from the room's list of enemies
-  local enemies = dungeon.rooms[dungeon.current_room].enemies
-  for i, enemy in ipairs(enemies) do
-    if enemy.collider == object2 then
-      enemy:die() -- Destroy the enemy
-      table.remove(enemies, i) -- Remove enemy from the list
-      break
+  -- Collision between attack and enemy
+  if object1.type == "Attack" and object2.type == "Enemy" then
+    object1.collider:destroy()
+    -- Remove the enemy object from the room's list of enemies
+    local enemies = dungeon.rooms[dungeon.current_room].enemies
+    for i, enemy in ipairs(enemies) do
+      if enemy.collider == object2 then
+        enemy:die() -- Destroy the enemy
+        table.remove(enemies, i) -- Remove enemy from the list
+        break
+      end
+    end
+  elseif object1.type == "Enemy" and object2.type == "Attack" then
+    object2.collider:destroy()
+    -- Remove the enemy object from the room's list of enemies
+    local enemies = dungeon.rooms[dungeon.current_room].enemies
+    for i, enemy in ipairs(enemies) do
+      if enemy.collider == object1 then
+        enemy:die() -- Destroy the enemy
+        table.remove(enemies, i) -- Remove enemy from the list
+        break
+      end
     end
   end
-elseif object1.type == "Enemy" and object2.type == "Attack" then
-  object2.collider:destroy()
-  -- Remove the enemy object from the room's list of enemies
-  local enemies = dungeon.rooms[dungeon.current_room].enemies
-  for i, enemy in ipairs(enemies) do
-    if enemy.collider == object1 then
-      enemy:die() -- Destroy the enemy
-      table.remove(enemies, i) -- Remove enemy from the list
-      break
-    end
-  end
-end
 end
 
 --mouse controller
 function love.mousepressed(x, y, button)
   dungeon.rooms[dungeon.current_room].tileset:mousepressed(world, x, y, button, p)
 
-  p:attack(world, x, y, button)
+  p:perform_attack(world, x, y, button)
   
 end
 
@@ -125,8 +125,8 @@ end
  
 function love.update(dt)
   world:update(dt)
-  --dungeon.rooms[dungeon.current_room].tileset:update()
-  p:update(dungeon)
+
+  p:update(dungeon, dt)
   
   p:move(dungeon.rooms[dungeon.current_room])
   
