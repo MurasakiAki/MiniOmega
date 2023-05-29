@@ -18,6 +18,8 @@ function love.load()
   -- This function is called once at the beginning of the game
   love.window.setFullscreen(true, "desktop")
   
+  world:setQueryDebugDrawing(true)
+
   world:addCollisionClass('Player')
   world:addCollisionClass('Door')
   world:addCollisionClass('Crop')
@@ -26,6 +28,7 @@ function love.load()
   world:addCollisionClass('Obstacle')
   world:addCollisionClass('Trap')
   world:addCollisionClass('Tile')
+  world:addCollisionClass('Attack')
 
   dungeon = Dungeon:new(world)
   
@@ -41,44 +44,38 @@ function love.load()
   world:setCallbacks(beginContact, nil, nil, nil)
 end
  
---collision detection between player and door
 function beginContact(collider1, collider2, collision)
   local object1 = collider1:getUserData()
   local object2 = collider2:getUserData()
- 
-  if dungeon.rooms[dungeon.current_room].active_doors == true and object1 and object1.type == "Player" and object2 and object2.type == "Door" or
-    object2 and object2.type == "Player" and object1 and object1.type == "Door" then
- 
-    local p = object1.type == "Player" and object1 or object2 -- Get the player object
- 
-    if object1.special_type and object1.special_type == "Forward" or
-      object2.special_type and object2.special_type == "Forward" then
- 
-      if dungeon.current_room == dungeon.size then
-        dungeon.changing_room = false
-      else
-        --local nextRoom = dungeon.rooms[dungeon.current_room + 1]
-        --p.collider:setLinearVelocity(0, 0) -- Stop player's current movement
-        --p.collider:setPosition(p.collider:getX(), nextRoom:gen_position_y(h) + nextRoom.height - 100)
-        dungeon.changing_room = true
-        on_change_room(dungeon.rooms[dungeon.current_room])
-        dungeon.current_room = dungeon.current_room + 1
-      end
 
-    else
-      if dungeon.current_room == 1 then
-        dungeon.changing_room = false
+  -- Collision between player and door
+  if (object1 and object1.type == "Player" and object2 and object2.type == "Door") or
+     (object2 and object2.type == "Player" and object1 and object1.type == "Door") then
+    local p = object1.type == "Player" and object1 or object2 -- Get the player object
+
+    if dungeon.rooms[dungeon.current_room].active_doors then -- Check if doors are active
+      if object1.special_type and object1.special_type == "Forward" or
+         object2.special_type and object2.special_type == "Forward" then
+        if dungeon.current_room == dungeon.size then
+          dungeon.changing_room = false
+        else
+          dungeon.changing_room = true
+          on_change_room(dungeon.rooms[dungeon.current_room])
+          dungeon.current_room = dungeon.current_room + 1
+        end
       else
-        --local prevRoom = dungeon.rooms[dungeon.current_room - 1]
-        --p.collider:setLinearVelocity(0, 0) -- Stop player's current movement
-        --p.collider:setPosition(p.collider:getX(), prevRoom:gen_position_y(h) + prevRoom.height + 100)
-        dungeon.changing_room = true
-        on_change_room(dungeon.rooms[dungeon.current_room])
-        dungeon.current_room = dungeon.current_room - 1
+        if dungeon.current_room == 1 then
+          dungeon.changing_room = false
+        else
+          dungeon.changing_room = true
+          on_change_room(dungeon.rooms[dungeon.current_room])
+          dungeon.current_room = dungeon.current_room - 1
+        end
       end
     end
   end
 
+  -- Collision between crop and enemy
   if object1.type == "Crop" and object2.type == "Enemy" then
     object1.tile.has_seed = false
     object1.collider:destroy()
@@ -86,10 +83,39 @@ function beginContact(collider1, collider2, collision)
     object2.tile.has_seed = false
     object2.collider:destroy()
   end
+
+-- Collision between attack and enemy
+if object1.type == "Attack" and object2.type == "Enemy" then
+  object1.collider:destroy()
+  -- Remove the enemy object from the room's list of enemies
+  local enemies = dungeon.rooms[dungeon.current_room].enemies
+  for i, enemy in ipairs(enemies) do
+    if enemy.collider == object2 then
+      enemy:die() -- Destroy the enemy
+      table.remove(enemies, i) -- Remove enemy from the list
+      break
+    end
+  end
+elseif object1.type == "Enemy" and object2.type == "Attack" then
+  object2.collider:destroy()
+  -- Remove the enemy object from the room's list of enemies
+  local enemies = dungeon.rooms[dungeon.current_room].enemies
+  for i, enemy in ipairs(enemies) do
+    if enemy.collider == object1 then
+      enemy:die() -- Destroy the enemy
+      table.remove(enemies, i) -- Remove enemy from the list
+      break
+    end
+  end
 end
- --mouse controller
+end
+
+--mouse controller
 function love.mousepressed(x, y, button)
   dungeon.rooms[dungeon.current_room].tileset:mousepressed(world, x, y, button, p)
+
+  p:attack(world, x, y, button)
+  
 end
 
 --keypress detection
@@ -106,7 +132,10 @@ function love.update(dt)
   
   if #dungeon.rooms[dungeon.current_room].enemies >= 1 then
     for i = 1, #dungeon.rooms[dungeon.current_room].enemies do
-      dungeon.rooms[dungeon.current_room].enemies[i]:move(p.collider:getX(), p.collider:getY())
+      local enemy = dungeon.rooms[dungeon.current_room].enemies[i]
+      if enemy.collider then -- Check if collider exists
+        enemy:move(p.collider:getX(), p.collider:getY())
+      end
     end
   end
   --updating position of doors

@@ -1,4 +1,5 @@
 love = require('love')
+Attack = require('attack')
 
 local screen_width, screen_height = love.window.getDesktopDimensions(1)
 
@@ -89,6 +90,32 @@ function player:update(dungeon)
   if self.collider:enter('Door') then
     self.x = screen_width/2 - self.width/2
     self.y = screen_height/2 - self.height/2
+  end
+end
+
+function player:attack(world, mouse_x, mouse_y, button)
+  if button == 1 then
+    local player_x, player_y = self.collider:getPosition()
+
+    -- Calculate the direction vector from player to mouse
+    local direction_x = mouse_x - player_x
+    local direction_y = mouse_y - player_y
+
+    -- Normalize the direction vector
+    local length = math.sqrt(direction_x * direction_x + direction_y * direction_y)
+    if length > 0 then
+      direction_x = direction_x / length
+      direction_y = direction_y / length
+    end
+
+    -- Offset the attack position
+    local offset = 64
+    local attack_x = player_x + direction_x * offset
+    local attack_y = player_y + direction_y * offset
+
+    
+    attack = Attack:new(world, attack_x, attack_y)
+    
   end
 end
 

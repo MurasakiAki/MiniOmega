@@ -13,11 +13,13 @@ function Enemy:new(world, x, y)
     e.health = 1
     e.speed = love.math.random(60, 90)
     e.damage = 1
+    e.mass = 5
 
     e.collider = world:newRectangleCollider(e.x, e.y, e.width, e.height)
     --e.collider:setType('kinematic')
-    e.collider:setCollisionClass('Enemy')
+    e.collider:setType('dynamic')
     e.collider:setFixedRotation(true)
+    e.collider:setLinearDamping(e.mass * 2.5)
     e.collider:setUserData(e)
 
     return e
@@ -36,6 +38,10 @@ function Enemy:move(target_x, target_y)
     else
         self.collider:setLinearVelocity(0, 0)
     end
+end
+
+function Enemy:die()
+    self.collider:destroy()
 end
 
 return Enemy
