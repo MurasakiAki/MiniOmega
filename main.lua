@@ -84,30 +84,12 @@ function beginContact(collider1, collider2, collision)
     object2.collider:destroy()
   end
 
--- Collision between attack and enemy
-if object1.type == "Attack" and object2.type == "Enemy" then
-  object1.collider:destroy()
-  -- Remove the enemy object from the room's list of enemies
-  local enemies = dungeon.rooms[dungeon.current_room].enemies
-  for i, enemy in ipairs(enemies) do
-    if enemy.collider == object2 then
-      enemy:die() -- Destroy the enemy
-      table.remove(enemies, i) -- Remove enemy from the list
-      break
-    end
+  -- Collision between attack and enemy
+  if object1.type == "Attack" and object2.type == "Enemy" then
+    print("Hit")
+  elseif object1.type == "Enemy" and object2.type == "Attack" then
+    print("Hit")
   end
-elseif object1.type == "Enemy" and object2.type == "Attack" then
-  object2.collider:destroy()
-  -- Remove the enemy object from the room's list of enemies
-  local enemies = dungeon.rooms[dungeon.current_room].enemies
-  for i, enemy in ipairs(enemies) do
-    if enemy.collider == object1 then
-      enemy:die() -- Destroy the enemy
-      table.remove(enemies, i) -- Remove enemy from the list
-      break
-    end
-  end
-end
 end
 
 --mouse controller

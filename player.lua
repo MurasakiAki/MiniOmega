@@ -100,7 +100,8 @@ end
 
 function player:perform_attack(world, mouse_x, mouse_y, button)
   if button == 1 then
-    if self.attack or not self.attack.has_started then 
+    self.has_started = true
+    if self.attack or self.attack.has_started then 
       local player_x, player_y = self.collider:getPosition()
 
       --calculate the direction vector from player to mouse
@@ -120,7 +121,6 @@ function player:perform_attack(world, mouse_x, mouse_y, button)
       local attack_y = player_y + direction_y * offset
       
       self.attack.collider:setPosition(attack_x, attack_y)
-      self.attack.collider.has_started = true
       print(self.attack.collider:isActive())
     end
   end
