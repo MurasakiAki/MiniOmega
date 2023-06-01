@@ -100,7 +100,7 @@ end
 
 function player:perform_attack(world, mouse_x, mouse_y, button)
   if button == 1 then
-    self.has_started = true
+    self.attack.has_started = true
     if self.attack or self.attack.has_started then 
       local player_x, player_y = self.collider:getPosition()
 
