@@ -1,5 +1,5 @@
 love = require('love')
-Attack = require('attack')
+local Attack = require('attack')
 
 local screen_width, screen_height = love.window.getDesktopDimensions(1)
 
@@ -24,7 +24,10 @@ function player:new(world, x, y)
   p.collider:setFixedRotation(true)
   p.collider:setUserData(p)
   p.collider:setCollisionClass('Player')
-  
+
+  p.attack = Attack:new(world, 0, 0)
+  p.attack.collider:setActive(false)
+
   return p
 end
 
@@ -33,7 +36,7 @@ function player:move(room)
   self.x = self.collider:getX()
   self.y = self.collider:getY()
 
-  -- Player movement
+  --player movement
   local dx = 0
   local dy = 0
 
@@ -50,29 +53,26 @@ function player:move(room)
     dx = dx + 1
   end
 
-  -- Normalize the direction vector
+  --normalize the direction vector
   local length = math.sqrt(dx * dx + dy * dy)
   if length > 0 then
     dx = dx / length
     dy = dy / length
   end
 
-  -- Apply the desired speed
   local desiredSpeed = self.speed
-  local currentSpeed = math.sqrt(self.collider:getLinearVelocity())  -- Get current speed
+  local currentSpeed = math.sqrt(self.collider:getLinearVelocity())
   if currentSpeed > desiredSpeed then
-    -- Limit the speed if it exceeds the desired speed
     dx = dx * desiredSpeed / currentSpeed
     dy = dy * desiredSpeed / currentSpeed
   else
-    -- Apply the desired speed
     dx = dx * desiredSpeed
     dy = dy * desiredSpeed
   end
 
   self.collider:setLinearVelocity(dx, dy)
 
-  -- Keep player within bounds of the room
+  --keep player within bounds of the room
   local minX = room:gen_position_x(screen_width)
   local minY = room:gen_position_y(screen_height)
   local maxX = minX + room.width
@@ -86,36 +86,43 @@ function player:move(room)
 
 end
 
-function player:update(dungeon)
+function player:update(dungeon, dt)
   if self.collider:enter('Door') then
     self.x = screen_width/2 - self.width/2
     self.y = screen_height/2 - self.height/2
+    self.collider:setPosition(self.x, self.y)
+  end
+
+  if self.attack and self.attack:isActive() then
+    self.attack:update(dt)
   end
 end
 
-function player:attack(world, mouse_x, mouse_y, button)
+function player:perform_attack(world, mouse_x, mouse_y, button)
   if button == 1 then
-    local player_x, player_y = self.collider:getPosition()
+    if self.attack or not self.attack.has_started then 
+      local player_x, player_y = self.collider:getPosition()
 
-    -- Calculate the direction vector from player to mouse
-    local direction_x = mouse_x - player_x
-    local direction_y = mouse_y - player_y
+      --calculate the direction vector from player to mouse
+      local direction_x = mouse_x - player_x
+      local direction_y = mouse_y - player_y
 
-    -- Normalize the direction vector
-    local length = math.sqrt(direction_x * direction_x + direction_y * direction_y)
-    if length > 0 then
-      direction_x = direction_x / length
-      direction_y = direction_y / length
+      --normalize the direction vector
+      local length = math.sqrt(direction_x * direction_x + direction_y * direction_y)
+      if length > 0 then
+        direction_x = direction_x / length
+        direction_y = direction_y / length
+      end
+
+      --offset the attack position
+      local offset = 64
+      local attack_x = player_x + direction_x * offset
+      local attack_y = player_y + direction_y * offset
+      
+      self.attack.collider:setPosition(attack_x, attack_y)
+      self.attack.collider.has_started = true
+      print(self.attack.collider:isActive())
     end
-
-    -- Offset the attack position
-    local offset = 64
-    local attack_x = player_x + direction_x * offset
-    local attack_y = player_y + direction_y * offset
-
-    
-    attack = Attack:new(world, attack_x, attack_y)
-    
   end
 end
 
@@ -133,7 +140,6 @@ function player:update_hand(key)
     end    
   end
 end
-
 
 function player:draw()
   love.graphics.setColor(0.8, 1, 0.1)
