@@ -121,7 +121,6 @@ function player:perform_attack(world, mouse_x, mouse_y, button)
       local attack_y = player_y + direction_y * offset
       
       self.attack.collider:setPosition(attack_x, attack_y)
-      print(self.attack.collider:isActive())
     end
   end
 end

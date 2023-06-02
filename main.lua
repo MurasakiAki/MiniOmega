@@ -84,12 +84,6 @@ function beginContact(collider1, collider2, collision)
     object2.collider:destroy()
   end
 
-  -- Collision between attack and enemy
-  if object1.type == "Attack" and object2.type == "Enemy" then
-    print("Hit")
-  elseif object1.type == "Enemy" and object2.type == "Attack" then
-    print("Hit")
-  end
 end
 
 --mouse controller
@@ -120,6 +114,7 @@ function love.update(dt)
       end
     end
   end
+  
   --updating position of doors
   fdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].forward_door.x, dungeon.rooms[dungeon.current_room].forward_door.y)
   bdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].back_door.x, dungeon.rooms[dungeon.current_room].back_door.y)
