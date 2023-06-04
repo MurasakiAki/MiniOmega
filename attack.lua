@@ -8,6 +8,7 @@ function Attack:new(world, x, y)
     a.type = "Attack"
     a.collider = world:newCircleCollider(x, y, a.size)
     a.collider:setSensor(true)
+    a.collider:setType('static')
     a.collider:setCollisionClass('Attack')
     a.collider:setUserData(a)
     a.collider:setObject(a)

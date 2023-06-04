@@ -17,6 +17,7 @@ function player:new(world, x, y)
   p.width = 50
   p.height = 50
 
+  p.money = 0
   p.current_item_index = 1
   p.in_hand = "hoe"
 

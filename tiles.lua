@@ -125,7 +125,7 @@ function Tiles:mousepressed(world, x, y, button, player)
                 
                 if tile.has_seed == false then
                     tile.has_seed = true
-                    tile.planted_seed = Crop:new(world, tile.x + tile.tileWidth/2 - 8, tile.y + tile.tileHeight/2 - 8, "Crop", 2, tile)
+                    tile.planted_seed = Crop:new(world, tile.x + tile.tileWidth/2 - 8, tile.y + tile.tileHeight/2 - 8, "Crop", 2, tile, 10)
                 end
             end
         end
