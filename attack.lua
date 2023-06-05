@@ -10,7 +10,7 @@ function Attack:new(world, x, y)
     a.collider:setSensor(true)
     a.collider:setCollisionClass("Attack")
     a.collider:setUserData(a)
-    a.has_started = false
+    a.is_attacking = false
     a.duration = 0.2
     a.timer = 0
 
@@ -18,13 +18,13 @@ function Attack:new(world, x, y)
 end
 
 function Attack:update(dt)
-    if self.has_started then
+    if self.is_attacking then
         self.collider:setActive(true)
         self.timer = self.timer + dt
         print(self.timer)
         if self.timer >= self.duration then
             self.timer = 0
-            self.has_started = false
+            self.is_attacking = false
             self.collider:setActive(false)
         end
     end
