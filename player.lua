@@ -23,6 +23,8 @@ function player:new(world, x, y)
   p.current_item_index = 1
   p.in_hand = "hoe"
 
+  p.is_const_damaged = false
+
   p.collider = world:newRectangleCollider(p.x, p.y, p.width, p.height)
   p.collider:setFixedRotation(true)
   p.collider:setUserData(p)
@@ -125,15 +127,6 @@ function player:perform_attack(world, mouse_x, mouse_y, button)
       
       self.attack.collider:setPosition(attack_x, attack_y)
     end
-
-    --offset the attack position
-    local offset = 64
-    local attack_x = player_x + direction_x * offset
-    local attack_y = player_y + direction_y * offset
-      
-    self.attack.collider:setPosition(attack_x, attack_y)
-    print(self.attack.collider:isActive())
-    
   end
 end
 

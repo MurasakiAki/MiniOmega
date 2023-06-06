@@ -110,9 +110,9 @@ function room:start_encounter(world)
     else
         if self.countdown_timer <= 0 then
             self.encounter_time = self.encounter_time - 1
-            self.countdown_timer = 1  -- Reset countdown timer to 1 second
+            self.countdown_timer = 1  --reset countdown timer to 1 second
 
-            -- Iterate through the tileset
+            --iterate through the tileset
             for i = 1, #self.tileset do
                 for j = 1, #self.tileset[i] do
                     local tile = self.tileset[i][j]
@@ -127,16 +127,14 @@ function room:start_encounter(world)
                 end
             end
 
-            
-
-            -- Spawning random number of enemies each second
+            --spawning random number of enemies each second
             local enemy_chance = love.math.random(1, 100)
             local enemy_count = love.math.random(1, 2)
 
             if enemy_chance <= 25 then
                 for i = 1, enemy_count do
-                    -- picking side, on which side should enemy spawn
-                    -- 1 left, 2 top, 3 right, 4 bottom
+                    --picking side, on which side should enemy spawn
+                    --1 left, 2 top, 3 right, 4 bottom
                     local room_side = love.math.random(1, 4)
 
                     if room_side == 1 then

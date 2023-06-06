@@ -48,6 +48,13 @@ function beginContact(collider1, collider2, collision)
   local object1 = collider1:getUserData()
   local object2 = collider2:getUserData()
 
+  local player = nil
+  if object1.type == "Player" then 
+    player = object1
+  elseif object2.type == "Player" then
+    player = object2
+  end
+
   -- Collision between player and door
   if (object1 and object1.type == "Player" and object2 and object2.type == "Door") or
      (object2 and object2.type == "Player" and object1 and object1.type == "Door") then
@@ -102,20 +109,31 @@ function beginContact(collider1, collider2, collision)
   end
   ]]
 
+  --detect collision between enemy and player
   if object1.type == "Player" and object2.type == "Enemy" or
   object1.type == "Enemy" and object2.type == "Player" then
-    
+
+    local player = nil
+
     if object1.type == "Player" then
+      player = object1
       object1:take_damage(object2.damage)
     else
+      player = object2
       object2:take_damage(object1.damage)
     end
 
-    if collision.isTouching() then
-      
+    --detect continuous collision between enemy and player
+    if object1:isTouching(object2) or
+    object2:isTouching(object1) then
+      player.is_const_damaged = true
+    else 
+      player.is_const_damaged = false
     end
 
   end
+
+
 
   if object1.type == "Crop" and object1.is_grown and object2.type == "Player" then
     object2.money = object2.money + object1.cost
