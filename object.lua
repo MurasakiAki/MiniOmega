@@ -43,7 +43,7 @@ function Object:new(world, x, y, width, height, object_type, is_breakable,
     o.damage_range_max = damage_range_max
     o.image = image
 
-    o.collider = world:newRectangleCOllider(o.x, o.y, o.width, o.height)
+    o.collider = world:newRectangleCollider(o.x, o.y, o.width, o.height)
     
 
     if is_breakable then

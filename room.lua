@@ -1,6 +1,7 @@
 require('love')
 Tiles = require('tiles')
 Enemy = require('enemy')
+Object = require('object')
 
 local screen_width, screen_height = love.window.getDesktopDimensions(1)
 
@@ -30,6 +31,8 @@ function room:new(world)
     new_room.forward_door = {x = 0, y = 0}
     new_room.back_door = {x = 0, y = 0}
 
+    new_room.traps = {}
+
     new_room.has_started = false
     new_room.encounter_time = math.random(60, 120)
 
@@ -49,6 +52,24 @@ function room:new(world)
     if new_room.is_special then
         new_room.tileset.is_clickable = false
         new_room.active_doors = true
+    else
+        local num_of_traps = math.random(0, 3)
+
+        for i = 1, num_of_traps do
+            trap = Object:new(world,
+            math.random(0, screen_width),
+            math.random(0, screen_height),
+            16, 16,
+            'Trap',
+            false,
+            true,
+            2,
+            false,
+            0,
+            5, 10
+        )
+        end
+
     end
 
     return new_room
