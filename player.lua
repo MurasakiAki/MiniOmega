@@ -17,6 +17,8 @@ function player:new(world, x, y)
   p.width = 50
   p.height = 50
 
+  p.max_health = 100
+  p.curr_health = p.max_health
   p.money = 0
   p.current_item_index = 1
   p.in_hand = "hoe"

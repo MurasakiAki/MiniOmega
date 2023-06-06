@@ -194,5 +194,5 @@ function love.draw()
   love.graphics.print(string.format("active doors: %s", tostring(dungeon.rooms[dungeon.current_room].active_doors)), 0, 90) 
   love.graphics.print(string.format("player's hand: %s", p.in_hand), 0, 105)
   love.graphics.print(string.format("player's money: %d", p.money), 0, 120)
-
+  love.graphics.print(string.format("player's health: %d", p.curr_health), 0, 135)
 end

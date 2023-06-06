@@ -54,9 +54,9 @@ function room:new(world)
         new_room.active_doors = true
     else
         local num_of_traps = math.random(0, 3)
-
-        for i = 1, num_of_traps do
-            trap = Object:new(world,
+        print("number of traps:" ..num_of_traps)
+        for i = 1, num_of_traps, 1 do
+            local trap = Object:new(world,
             math.random(0, screen_width),
             math.random(0, screen_height),
             16, 16,
@@ -66,8 +66,9 @@ function room:new(world)
             2,
             false,
             0,
-            5, 10
-        )
+            5, 10)
+
+            table.insert(new_room.traps, trap)
         end
 
     end
