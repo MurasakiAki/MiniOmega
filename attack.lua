@@ -8,9 +8,11 @@ function Attack:new(world, x, y)
     a.type = "Attack"
     a.collider = world:newCircleCollider(x, y, a.size)
     a.collider:setSensor(true)
-    a.collider:setCollisionClass("Attack")
+    a.collider:setType('static')
+    a.collider:setCollisionClass('Attack')
     a.collider:setUserData(a)
-    a.is_attacking = false
+    a.collider:setObject(a)
+    a.has_started = false
     a.duration = 0.2
     a.timer = 0
 
@@ -21,7 +23,6 @@ function Attack:update(dt)
     if self.is_attacking then
         self.collider:setActive(true)
         self.timer = self.timer + dt
-        print(self.timer)
         if self.timer >= self.duration then
             self.timer = 0
             self.is_attacking = false

@@ -17,6 +17,7 @@ function player:new(world, x, y)
   p.width = 50
   p.height = 50
 
+  p.money = 0
   p.current_item_index = 1
   p.in_hand = "hoe"
 
@@ -99,20 +100,28 @@ function player:update(dungeon, dt)
 end
 
 function player:perform_attack(world, mouse_x, mouse_y, button)
-  if button == 1  and self.attack.is_attacking == false then
-    self.attack.is_attacking = true
-    print("perform attack", self.attack.is_attacking)
-    local player_x, player_y = self.collider:getPosition()
+  if button == 1 then
+    self.attack.has_started = true
+    if self.attack or self.attack.has_started then 
+      local player_x, player_y = self.collider:getPosition()
 
-    --calculate the direction vector from player to mouse
-    local direction_x = mouse_x - player_x
-    local direction_y = mouse_y - player_y
+      --calculate the direction vector from player to mouse
+      local direction_x = mouse_x - player_x
+      local direction_y = mouse_y - player_y
 
-    --normalize the direction vector
-    local length = math.sqrt(direction_x * direction_x + direction_y * direction_y)
-    if length > 0 then
-      direction_x = direction_x / length
-      direction_y = direction_y / length
+      --normalize the direction vector
+      local length = math.sqrt(direction_x * direction_x + direction_y * direction_y)
+      if length > 0 then
+        direction_x = direction_x / length
+        direction_y = direction_y / length
+      end
+
+      --offset the attack position
+      local offset = 64
+      local attack_x = player_x + direction_x * offset
+      local attack_y = player_y + direction_y * offset
+      
+      self.attack.collider:setPosition(attack_x, attack_y)
     end
 
     --offset the attack position
