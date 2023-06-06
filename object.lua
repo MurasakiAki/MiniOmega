@@ -14,15 +14,14 @@ Object = {
     mass = 0,
     is_movable = false,
     health = 0,
-    damage_range_min = 0,
-    damage_range_max = 1,
+    damage = 0,
     image = ''
 }
 
 Object.__index = Object
 
 function Object:new(world, x, y, width, height, object_type, is_breakable,
-    can_deal_damage, mass, is_movable, health, damage_range_min, damage_range_max, 
+    can_deal_damage, mass, is_movable, health, damage, 
     image)
 
     --can make entirely new object
@@ -39,8 +38,7 @@ function Object:new(world, x, y, width, height, object_type, is_breakable,
     o.is_movable = is_movable
     o.mass = mass
     o.health = health
-    o.damage_range_min = damage_range_min
-    o.damage_range_max = damage_range_max
+    o.damage = damage
     o.image = image
 
     o.collider = world:newRectangleCollider(o.x, o.y, o.width, o.height)
@@ -55,17 +53,6 @@ function Object:new(world, x, y, width, height, object_type, is_breakable,
     if can_deal_damage then
         o.collider:setSensor(true)
         o.collider:setCollisionClass('Trap')
-        if damage_range_min <= 0 then
-            damage_range_min = 1
-        end
-
-        if damage_range_max <= 0 then
-            damage_range_max = damage_range_min + 1
-        end
-
-        if damage_range_max == damage_range_min then
-            damage_range_max = damage_range_max + 1
-        end
     else 
         o.collider:setCollisonClass('Object')
     end

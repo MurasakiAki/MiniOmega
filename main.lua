@@ -111,7 +111,9 @@ function beginContact(collider1, collider2, collision)
 
   --detect collision between enemy and player
   if object1.type == "Player" and object2.type == "Enemy" or
-  object1.type == "Enemy" and object2.type == "Player" then
+  object1.type == "Enemy" and object2.type == "Player" or 
+  object1.type == "Player" and object2.object_type == "Trap" or
+  object1.object_type == "Trap" and object2.type == "Player" then
 
     local player = nil
 
@@ -123,6 +125,7 @@ function beginContact(collider1, collider2, collision)
       object2:take_damage(object1.damage)
     end
 
+    --[[
     --detect continuous collision between enemy and player
     if object1:isTouching(object2) or
     object2:isTouching(object1) then
@@ -130,9 +133,8 @@ function beginContact(collider1, collider2, collision)
     else 
       player.is_const_damaged = false
     end
-
+    ]]
   end
-
 
 
   if object1.type == "Crop" and object1.is_grown and object2.type == "Player" then

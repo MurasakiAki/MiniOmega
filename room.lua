@@ -60,13 +60,13 @@ function room:new(world)
             math.random(0, screen_width),
             math.random(0, screen_height),
             16, 16,
-            'Trap',
+            "Trap",
             false,
             true,
             2,
             false,
             0,
-            5, 10)
+            10)
 
             table.insert(new_room.traps, trap)
         end
