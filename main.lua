@@ -102,6 +102,21 @@ function beginContact(collider1, collider2, collision)
   end
   ]]
 
+  if object1.type == "Player" and object2.type == "Enemy" or
+  object1.type == "Enemy" and object2.type == "Player" then
+    
+    if object1.type == "Player" then
+      object1:take_damage(object2.damage)
+    else
+      object2:take_damage(object1.damage)
+    end
+
+    if collision.isTouching() then
+      
+    end
+
+  end
+
   if object1.type == "Crop" and object1.is_grown and object2.type == "Player" then
     object2.money = object2.money + object1.cost
     object1.tile.has_seed = false
@@ -134,7 +149,7 @@ function love.update(dt)
   
   p:move(dungeon.rooms[dungeon.current_room])
   
-  --[[
+  --spawning enemies
   if #dungeon.rooms[dungeon.current_room].enemies >= 1 then
     for i = 1, #dungeon.rooms[dungeon.current_room].enemies do
       local enemy = dungeon.rooms[dungeon.current_room].enemies[i]
@@ -143,7 +158,7 @@ function love.update(dt)
       end
     end
   end
-  ]]
+  
   --updating position of doors
   fdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].forward_door.x, dungeon.rooms[dungeon.current_room].forward_door.y)
   bdoor.collider:setPosition(dungeon.rooms[dungeon.current_room].back_door.x, dungeon.rooms[dungeon.current_room].back_door.y)

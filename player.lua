@@ -152,6 +152,10 @@ function player:update_hand(key)
   end
 end
 
+function player:take_damage(damage)
+  self.curr_health = self.curr_health - damage
+end
+
 function player:draw()
   love.graphics.setColor(0.8, 1, 0.1)
 

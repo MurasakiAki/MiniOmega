@@ -12,7 +12,7 @@ function Enemy:new(world, x, y)
     e.type = "Enemy"
     e.health = 1
     e.speed = love.math.random(60, 90)
-    e.damage = 1
+    e.damage = 5
     e.mass = 5
 
     e.collider = world:newRectangleCollider(e.x, e.y, e.width, e.height)

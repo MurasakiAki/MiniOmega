@@ -127,6 +127,8 @@ function room:start_encounter(world)
                 end
             end
 
+            
+
             -- Spawning random number of enemies each second
             local enemy_chance = love.math.random(1, 100)
             local enemy_count = love.math.random(1, 2)

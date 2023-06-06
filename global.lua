@@ -25,6 +25,8 @@ function on_change_room(room)
             end
         end
     end
+end
 
-    
+function call(obj, func)
+    obj:func()
 end
