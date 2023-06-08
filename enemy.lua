@@ -45,7 +45,10 @@ function Enemy:move(target_x, target_y)
 end
 
 function Enemy:die()
-    self.collider:destroy()
-end
+    if self.collider then
+      self.collider:destroy()
+      self.collider = nil
+    end
+  end
 
 return Enemy

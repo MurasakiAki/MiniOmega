@@ -48,13 +48,6 @@ function beginContact(collider1, collider2, collision)
   local object1 = collider1:getUserData()
   local object2 = collider2:getUserData()
 
-  local player = nil
-  if object1.type == "Player" then 
-    player = object1
-  elseif object2.type == "Player" then
-    player = object2
-  end
-
   -- Collision between player and door
   if (object1 and object1.type == "Player" and object2 and object2.type == "Door") or
      (object2 and object2.type == "Player" and object1 and object1.type == "Door") then
@@ -80,30 +73,51 @@ function beginContact(collider1, collider2, collision)
         end
       end
     end
+    return
   end
 
   -- Collision between crop and enemy
   if object1.type == "Crop" and object2.type == "Enemy" then
     object1.tile.has_seed = false
     object1.collider:destroy()
+    return
   elseif object1.type == "Enemy" and object2.type == "Crop" then
     object2.tile.has_seed = false
     object2.collider:destroy()
+    return
   end
 
-  
-  if object1.type == "Attack" and object2.type == "Enemy" or object1.type == "Enemy" and object2.type == "Attack" then
-
+  -- Collision between attack and enemy
+  if object1.type == "Attack" and object2.type == "Enemy" or 
+    object1.type == "Enemy" and object2.type == "Attack" then
     print('hit')
+    
+    local enemy
+    if object2.type == "Enemy" then
+      enemy = object2
+    elseif object1.type == "Enemy" then
+      enemy = object1
+    end
 
+    if enemy then
+      enemy:die()
+      --remove the enemy from the list of enemies in the current room
+      local room = dungeon.rooms[dungeon.current_room]
+      for i = #room.enemies, 1, -1 do
+        if room.enemies[i] == enemy then
+          table.remove(room.enemies, i)
+          break
+        end
+      end
+    end
+    return
   end
 
-
-  --detect collision between enemy and player
+  -- Collision between enemy and player
   if object1.type == "Player" and object2.type == "Enemy" or
-  object1.type == "Enemy" and object2.type == "Player" or 
-  object1.type == "Player" and object2.object_type == "Trap" or
-  object1.object_type == "Trap" and object2.type == "Player" then
+     object1.type == "Enemy" and object2.type == "Player" or 
+     object1.type == "Player" and object2.object_type == "Trap" or
+     object1.object_type == "Trap" and object2.type == "Player" then
 
     local player = nil
 
@@ -115,28 +129,17 @@ function beginContact(collider1, collider2, collision)
       object2:take_damage(object1.damage)
     end
 
-    --[[
-    --detect continuous collision between enemy and player
-    if object1:isTouching(object2) or
-    object2:isTouching(object1) then
-      player.is_const_damaged = true
-    else 
-      player.is_const_damaged = false
-    end
-    ]]
+    return
   end
 
-
+  -- Collision between crop and player
   if object1.type == "Crop" and object1.is_grown and object2.type == "Player" then
-    object2.money = object2.money + object1.cost
-    object1.tile.has_seed = false
-    object1.collider:destroy()
+    object2:pick_crop(object1)
+    return
   elseif object1.type == "Player" and object2.type == "Crop" and object2.is_grown then
-    object1.money = object1.money + object2.cost
-    object2.tile.has_seed = false
-    object2.collider:destroy()
+    object1:pick_crop(object2)
+    return
   end
-
 end
 
 --mouse controller
@@ -175,8 +178,8 @@ function love.update(dt)
   
 end
  
+--drawing objects in the scene
 function love.draw()
-  --drawing objects in the scene
   love.graphics.setBackgroundColor(0, 0.4, 0.4)
 
   dungeon.rooms[dungeon.current_room].tileset:draw()
