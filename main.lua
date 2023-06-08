@@ -91,23 +91,13 @@ function beginContact(collider1, collider2, collision)
     object2.collider:destroy()
   end
 
-  --[[
+  
   if object1.type == "Attack" and object2.type == "Enemy" or object1.type == "Enemy" and object2.type == "Attack" then
 
-    local enemy
-
-    if object1.type == "Enemy" then
-      enemy = object1
-    else
-      enemy = object2
-    end
-    
-    if enemy then
-      enemy:die()
-    end
+    print('hit')
 
   end
-  ]]
+
 
   --detect collision between enemy and player
   if object1.type == "Player" and object2.type == "Enemy" or
@@ -161,7 +151,7 @@ end
 function love.keypressed(key, scancode, isrepeat)
   p:update_hand(key)
 end
- 
+
 function love.update(dt)
   world:update(dt)
 

@@ -76,6 +76,7 @@ function room:new(world)
     return new_room
 end
 
+--draws the prepare counter
 function room:draw_prepare_counter(world)
     if not self.has_started and not self.is_special then
         self.has_started = true
@@ -102,6 +103,7 @@ function room:draw_prepare_counter(world)
     end
 end
 
+--start the enemy encounter
 function room:start_encounter(world)
     if self.encounter_time == 0 then
         love.graphics.setColor(0.75, 0.2, 0.1)

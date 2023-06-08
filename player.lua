@@ -98,15 +98,19 @@ function player:update(dungeon, dt)
     self.collider:setPosition(self.x, self.y)
   end
 
-  if self.attack and self.attack:isActive() then
-    self.attack:update(dt)
+  self.attack:update(dt)
+
+
+  if self.attack.is_active == false then
+    self.attack.has_started = false
   end
+
 end
 
 function player:perform_attack(world, mouse_x, mouse_y, button)
   if button == 1 then
     self.attack.has_started = true
-    if self.attack or self.attack.has_started then 
+    if self.attack then 
       local player_x, player_y = self.collider:getPosition()
 
       --calculate the direction vector from player to mouse

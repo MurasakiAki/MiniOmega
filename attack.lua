@@ -13,6 +13,7 @@ function Attack:new(world, x, y)
     a.collider:setUserData(a)
     a.collider:setObject(a)
     a.has_started = false
+    a.is_attacking = false
     a.duration = 0.2
     a.timer = 0
 
@@ -20,15 +21,17 @@ function Attack:new(world, x, y)
 end
 
 function Attack:update(dt)
-    if self.is_attacking then
-        self.collider:setActive(true)
+    self.collider:setActive(self.is_attacking)
+    if self.has_started then
         self.timer = self.timer + dt
         if self.timer >= self.duration then
             self.timer = 0
-            self.is_attacking = false
-            self.collider:setActive(false)
+            self.is_attacking = true
         end
+    else
+        self.is_attacking = false
     end
+    
 end
 
 function Attack:isActive()
